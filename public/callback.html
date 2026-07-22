@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Connecting to Spotify…</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="view" style="justify-content:center;align-items:center;text-align:center;gap:16px">
+    <div class="brand-logo">🎵</div>
+    <h2 id="msg">Connecting to Spotify…</h2>
+    <p class="muted" id="sub"></p>
+    <a href="/" class="btn btn-ghost hidden" id="back">← Back to the table</a>
+  </div>
+  <script>
+    (async () => {
+      const TOK_KEY = 'hitbeat:spotify:tokens';
+      const VER_KEY = 'hitbeat:spotify:verifier';
+      const ST_KEY = 'hitbeat:spotify:state';
+      const params = new URLSearchParams(location.search);
+      const code = params.get('code');
+      const state = params.get('state');
+      const err = params.get('error');
+      const msg = document.getElementById('msg');
+      const sub = document.getElementById('sub');
+      const back = document.getElementById('back');
+
+      function fail(text) { msg.textContent = 'Spotify connection failed'; sub.textContent = text; back.classList.remove('hidden'); }
+
+      if (err) return fail(err);
+      if (!code) return fail('No authorization code returned.');
+      if (state !== localStorage.getItem(ST_KEY)) return fail('State mismatch — please try connecting again.');
+
+      const verifier = localStorage.getItem(VER_KEY);
+      let cfg;
+      try { cfg = await (await fetch('/config')).json(); } catch { return fail('Could not load config.'); }
+
+      try {
+        const res = await fetch('https://accounts.spotify.com/api/token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            grant_type: 'authorization_code',
+            code,
+            redirect_uri: cfg.redirectUri,
+            client_id: cfg.clientId,
+            code_verifier: verifier,
+          }),
+        });
+        if (!res.ok) return fail('Token exchange failed (' + res.status + '). Check your redirect URI matches exactly.');
+        const data = await res.json();
+        const expires_at = Date.now() + (data.expires_in || 3600) * 1000;
+        localStorage.setItem(TOK_KEY, JSON.stringify({ access_token: data.access_token, refresh_token: data.refresh_token, expires_at }));
+        localStorage.removeItem(VER_KEY);
+        localStorage.removeItem(ST_KEY);
+        msg.textContent = 'Connected! 🎧';
+        sub.textContent = 'Taking you back to the table…';
+        setTimeout(() => { location.href = '/'; }, 800);
+      } catch (e) {
+        fail(e.message || 'Unexpected error');
+      }
+    })();
+  </script>
+</body>
+</html>

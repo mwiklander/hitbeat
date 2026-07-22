@@ -1,0 +1,18 @@
+{
+  "name": "hitster-web",
+  "version": "1.0.0",
+  "description": "A LAN party music-timeline game (Hitster-style) powered by Spotify",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.8.1"
+  }
+}

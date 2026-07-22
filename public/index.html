@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#120a24" />
+  <title>Hitbeat — name that year</title>
+  <link rel="preconnect" href="https://sdk.scdn.co" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- ============ LANDING ============ -->
+    <section id="view-landing" class="view">
+      <div class="brand">
+        <div class="brand-logo">🎵</div>
+        <h1>Hit<span>beat</span></h1>
+        <p class="tagline">Hear a song. Guess the year. Build your timeline.</p>
+      </div>
+      <div class="landing-actions">
+        <button id="btn-be-table" class="btn btn-primary btn-jumbo">
+          <span class="btn-emoji">📻</span>
+          <span>Start the game table</span>
+          <small>Run this on the machine with the speakers</small>
+        </button>
+        <div class="join-inline">
+          <input id="input-join-code" inputmode="text" autocapitalize="characters" maxlength="4" placeholder="CODE" />
+          <button id="btn-join-code" class="btn btn-ghost">Join a game</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ JOIN (name + emoji) ============ -->
+    <section id="view-join" class="view hidden">
+      <div class="join-card">
+        <h2>Join the party</h2>
+        <p class="muted">Game <b id="join-code-label">····</b></p>
+        <label class="field-label">Your name</label>
+        <input id="input-name" maxlength="20" placeholder="e.g. Magnus" />
+        <label class="field-label">Pick a vibe</label>
+        <div id="emoji-grid" class="emoji-grid"></div>
+        <button id="btn-do-join" class="btn btn-primary btn-block">Let’s go →</button>
+        <p id="join-error" class="error hidden"></p>
+      </div>
+    </section>
+
+    <!-- ============ PLAYER ============ -->
+    <section id="view-player" class="view hidden">
+      <header class="topbar">
+        <div class="topbar-me"><span id="me-emoji"></span> <span id="me-name"></span></div>
+        <div class="topbar-code">#<span id="player-code"></span></div>
+      </header>
+      <div id="player-body"></div>
+    </section>
+
+    <!-- ============ TABLE / JUKEBOX ============ -->
+    <section id="view-table" class="view hidden">
+      <div id="table-body"></div>
+    </section>
+  </div>
+
+  <!-- ============ REVEAL OVERLAY ============ -->
+  <div id="reveal" class="reveal hidden" aria-hidden="true">
+    <div class="reveal-card">
+      <div class="reveal-verdict" id="reveal-verdict"></div>
+      <div class="reveal-year" id="reveal-year"></div>
+      <div class="reveal-title" id="reveal-title"></div>
+      <div class="reveal-artist" id="reveal-artist"></div>
+      <div id="reveal-guesses"></div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/spotify.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
