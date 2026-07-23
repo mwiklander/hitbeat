@@ -487,6 +487,21 @@ io.on('connection', (socket) => {
     });
   });
 
+  // ---- host team management (lobby console) ----
+  socket.on('admin:movePlayer', ({ playerId, teamId } = {}) => {
+    withSession((session) => {
+      if (socket.data.role !== 'host') return;
+      if (session.adminMovePlayer(playerId, teamId || null)) broadcast(session);
+    });
+  });
+
+  socket.on('admin:removeTeam', ({ teamId } = {}) => {
+    withSession((session) => {
+      if (socket.data.role !== 'host') return;
+      if (session.adminRemoveTeam(teamId)) broadcast(session);
+    });
+  });
+
   socket.on('game:reset', () => {
     withSession((session) => {
       if (socket.data.role !== 'host') return;

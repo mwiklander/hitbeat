@@ -99,6 +99,22 @@ Every player's phone shows an **📋 All timelines** section — scroll down to 
 every team's board at once, with the team currently up marked "🎤 up now" and
 your own tagged "⭐ you".
 
+### Team management (table lobby)
+
+Below the settings, the table shows a **Teams** console for tidying up how
+people have grouped themselves before you start:
+
+- **Reassign a player** — each player has a dropdown; pick another team (or
+  **Unassigned**) to move them. Handy when the group wants to even out teams.
+- **Remove a team** — the 🗑 button drops a team; any players on it go back to
+  the unassigned pool to re-pick. Empty teams are flagged and are never dealt
+  into the game anyway, so you can safely clear them out.
+- Players who've lost connection show as **offline**, so you can spot a team
+  that's effectively empty (everyone left) and remove it.
+
+Switching teams no longer leaves a stray empty team behind — it's cleaned up
+automatically.
+
 ### Game settings (table lobby, before you start)
 
 - **🎵 Songs per turn** — how many songs in a row a team can keep placing

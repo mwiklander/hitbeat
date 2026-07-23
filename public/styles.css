@@ -291,6 +291,22 @@ input:focus { outline: none; border-color: var(--accent); }
 .table-team-row { background: var(--panel); border: 1px solid var(--stroke); border-radius: 16px; padding: 12px 14px; }
 .table-team-row.active { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(255,77,141,.3); }
 
+/* ---------- team management console (lobby, host) ---------- */
+.team-console { display: flex; flex-direction: column; gap: 10px; }
+.tm-team { background: var(--panel); border: 1px solid var(--stroke); border-left: 4px solid var(--team, var(--stroke)); border-radius: 14px; padding: 10px 12px; }
+.tm-team.tm-empty { opacity: .8; border-left-color: var(--muted); }
+.tm-unassigned { border-left-color: var(--accent-2); }
+.tm-head { display: flex; align-items: center; gap: 8px; }
+.tm-name { font-weight: 800; font-size: 16px; }
+.tm-count { font-size: 13px; }
+.tm-tag { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); background: rgba(255,255,255,.06); border-radius: 999px; padding: 2px 8px; }
+.tm-remove { margin-left: auto; padding: 4px 10px; }
+.tm-hint { font-size: 12px; margin-top: 6px; }
+.tm-member { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.tm-who { flex: 1; font-weight: 700; font-size: 15px; }
+.tm-off { color: var(--muted); font-weight: 600; font-size: 12px; }
+.tm-move { flex: 0 0 auto; max-width: 46%; font-size: 13px; padding: 6px 8px; border-radius: 10px; }
+
 /* ---------- table control tray ---------- */
 .control-tray {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;

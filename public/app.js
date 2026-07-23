@@ -738,8 +738,8 @@ function renderTableLobby(body) {
   el('game-settings').appendChild(gameSettingsPanel());
 
   const teamsBox = el('table-teams');
-  if (!snap.teams.length) teamsBox.innerHTML = '<p class="muted">No teams yet — be the first!</p>';
-  snap.teams.forEach((t) => teamsBox.appendChild(tableTeamRow(t, false)));
+  teamsBox.innerHTML = '<div class="section-title">Teams <span class="muted" style="text-transform:none;font-weight:600">— reassign players or remove empty teams</span></div>';
+  teamsBox.appendChild(teamManagementConsole());
 
   el('spotify-slot').appendChild(spotifyStatusEl());
 
@@ -1043,6 +1043,85 @@ function powersChecklist() {
     box.appendChild(row);
   });
 
+  return box;
+}
+
+// Host-only lobby console: see every team + its players (with connection
+// status), reassign players between teams / to unassigned, and remove teams
+// (empty ones won't be dealt in; removing a team drops its players to the pool).
+function teamManagementConsole() {
+  const box = document.createElement('div');
+  box.className = 'team-console';
+
+  const memberRow = (p, currentTeamId) => {
+    const row = document.createElement('div');
+    row.className = 'tm-member';
+    const off = p.connected ? '' : ' <span class="tm-off" title="Disconnected">· offline</span>';
+    const who = document.createElement('span');
+    who.className = 'tm-who';
+    who.innerHTML = `${p.emoji} ${escapeHtml(p.name)}${off}`;
+    row.appendChild(who);
+    const sel = document.createElement('select');
+    sel.className = 'tm-move';
+    sel.title = 'Move to another team';
+    const optU = new Option('— Unassigned —', '');
+    if (!currentTeamId) optU.selected = true;
+    sel.appendChild(optU);
+    snap.teams.forEach((t) => {
+      const opt = new Option(`${t.emoji} ${t.name}`, t.id);
+      if (t.id === currentTeamId) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    sel.addEventListener('change', () => socket.emit('admin:movePlayer', { playerId: p.id, teamId: sel.value || null }));
+    row.appendChild(sel);
+    return row;
+  };
+
+  snap.teams.forEach((t) => {
+    const connected = t.members.filter((m) => m.connected).length;
+    const empty = t.members.length === 0;
+    const allOff = !empty && connected === 0;
+    const card = document.createElement('div');
+    card.className = 'tm-team' + (empty || allOff ? ' tm-empty' : '');
+    card.style.setProperty('--team', t.color);
+    const head = document.createElement('div');
+    head.className = 'tm-head';
+    const tag = empty ? '<span class="tm-tag">empty</span>' : (allOff ? '<span class="tm-tag">all offline</span>' : '');
+    head.innerHTML = `<span class="tm-name">${t.emoji} ${escapeHtml(t.name)}</span>
+      <span class="muted tm-count">${t.members.length} player${t.members.length === 1 ? '' : 's'}</span>${tag}`;
+    const rm = document.createElement('button');
+    rm.className = 'btn btn-ghost btn-sm tm-remove';
+    rm.textContent = '🗑';
+    rm.title = empty ? 'Remove this empty team' : 'Remove team (players go back to unassigned)';
+    rm.addEventListener('click', () => {
+      if (empty || confirm(`Remove “${t.name}”? Its ${t.members.length} player(s) go back to unassigned.`)) {
+        socket.emit('admin:removeTeam', { teamId: t.id });
+      }
+    });
+    head.appendChild(rm);
+    card.appendChild(head);
+    if (empty) {
+      const hint = document.createElement('div');
+      hint.className = 'muted tm-hint';
+      hint.textContent = 'No players — won’t be dealt into the game. Safe to remove.';
+      card.appendChild(hint);
+    } else {
+      t.members.forEach((m) => card.appendChild(memberRow(m, t.id)));
+    }
+    box.appendChild(card);
+  });
+
+  if (snap.lobbyPool.length) {
+    const card = document.createElement('div');
+    card.className = 'tm-team tm-unassigned';
+    card.innerHTML = `<div class="tm-head"><span class="tm-name">🧍 Unassigned</span> <span class="muted tm-count">${snap.lobbyPool.length}</span></div>`;
+    snap.lobbyPool.forEach((p) => card.appendChild(memberRow(p, null)));
+    box.appendChild(card);
+  }
+
+  if (!snap.teams.length && !snap.lobbyPool.length) {
+    box.innerHTML = '<p class="muted">No players yet — share the QR to get people in.</p>';
+  }
   return box;
 }
 
