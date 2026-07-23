@@ -317,6 +317,23 @@ io.on('connection', (socket) => {
     });
   });
 
+  // A challenger (any member of a NON-active team) spends a bonus card to
+  // counter the active placement during the blind steal window. Engine enforces
+  // team eligibility + affordability; reveals immediately on a valid challenge.
+  socket.on('turn:steal', ({ slotIndex } = {}) => {
+    withSession((session) => {
+      if (session.attemptSteal(socket.data.playerId, slotIndex)) broadcast(session);
+    });
+  });
+
+  // Close the steal window with no challenge (active team or table). Reveals.
+  socket.on('turn:reveal', () => {
+    withSession((session) => {
+      if (socket.data.role !== 'host' && !isActiveTeamMember(session)) return;
+      if (session.revealNow()) broadcast(session);
+    });
+  });
+
   socket.on('turn:advance', () => {
     withSession((session) => {
       // host or a member of the team that just played may advance

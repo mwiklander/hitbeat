@@ -95,6 +95,10 @@ Everyone must be on the **same Wi-Fi**.
 The year-only mini-cards along each timeline can be **tapped to flip** and see
 which song they were, and the strip **scrolls left/right** as timelines grow.
 
+Every player's phone shows an **📋 All timelines** section — scroll down to see
+every team's board at once, with the team currently up marked "🎤 up now" and
+your own tagged "⭐ you".
+
 ### Game settings (table lobby, before you start)
 
 - **🎵 Songs per turn** — how many songs in a row a team can keep placing
@@ -125,6 +129,14 @@ these happen automatically — a team always chooses when to cash a card in:
   timeline. No listening, no guessing, no placement risk — this is the
   original "auto bonus card" idea from early testing, now an explicit choice
   instead of something that happened automatically.
+- **🕵️ Steal (challenge)** — when the team in the hot seat locks in their
+  placement, everyone else gets a brief blind window (the year stays hidden) to
+  spend a bonus card and challenge: on your phone you pick where *you* think the
+  song fits in **their** timeline. If they were wrong and your spot is right,
+  the card — and the point — come to your team instead. Only one challenge per
+  song (first to lock in), and the bonus card is spent whether you nail it or
+  not. The active team (or the table) taps **Reveal** once challengers have had
+  their moment.
 
 Each offer only appears on the table/phone **exactly when it applies** — you
 never see a power you can't afford or that wouldn't do anything right now.

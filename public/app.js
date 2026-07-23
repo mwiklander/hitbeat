@@ -36,6 +36,7 @@ let myId = null;          // player id
 let joinCode = null;
 let snap = null;          // latest snapshot
 let pendingSlot = null;   // slot index the active player has armed
+let pendingStealSlot = null; // slot a challenger has armed in the steal window
 let titleGuessVal = '';   // bonus-round text, kept across re-renders within a turn
 let artistGuessVal = '';
 let lastSeenTurnId = null; // resets pendingSlot/guesses when a new turn starts
@@ -302,6 +303,7 @@ function renderPlayerGame(body) {
   if (snap.turn && snap.turn.id !== lastSeenTurnId) {
     lastSeenTurnId = snap.turn.id;
     pendingSlot = null;
+    pendingStealSlot = null;
     titleGuessVal = '';
     artistGuessVal = '';
   }
@@ -326,9 +328,10 @@ function renderPlayerGame(body) {
   body.appendChild(banner);
 
   const revealed = snap.turn && snap.turn.revealed;
+  const awaitingSteal = snap.turn && snap.turn.awaitingSteal;
 
-  // Active placement UI (only for the active team, before reveal)
-  if (isMyTurn && !revealed) {
+  // Active placement UI (only for the active team, before reveal / steal window)
+  if (isMyTurn && !revealed && !awaitingSteal) {
     const wrap = document.createElement('div');
     wrap.className = 'timeline-wrap';
     wrap.innerHTML = `<div class="timeline-label">${mine.emoji} Where does this song go?${tokenBadgeHtml(mine)}</div>`;
@@ -368,23 +371,99 @@ function renderPlayerGame(body) {
       if (confirm('Swap this song for a new one? Your team keeps its turn — no penalty.')) socket.emit('admin:redraw');
     });
     body.appendChild(stumped);
-  } else if (currentTeam) {
-    // read-only view of the team currently placing
-    const wrap = document.createElement('div');
-    wrap.className = 'timeline-wrap';
-    wrap.innerHTML = `<div class="timeline-label">${currentTeam.emoji} ${escapeHtml(currentTeam.name)}’s timeline · ${currentTeam.score}/${snap.target}</div>`;
-    wrap.appendChild(buildTimeline(currentTeam, { withSlots: false }));
-    body.appendChild(wrap);
   }
 
-  // Always show my own team timeline to browse (if not already shown above)
-  if (mine && !(isMyTurn)) {
-    const wrap = document.createElement('div');
-    wrap.className = 'timeline-wrap';
-    wrap.innerHTML = `<div class="timeline-label">${mine.emoji} Your timeline · ${mine.score}/${snap.target}${tokenBadgeHtml(mine)}</div>`;
-    wrap.appendChild(buildTimeline(mine, { withSlots: false }));
-    body.appendChild(wrap);
+  // Blind steal-challenge window: the active team locked in, the year is still
+  // hidden, and another team may spend a bonus card to counter their placement.
+  if (awaitingSteal) appendStealWindow(body, { currentTeam, mine, isMyTurn });
+
+  // Every team's timeline on each player's own device — the active team pinned
+  // first, then the rest. Scroll down to see the whole board from your phone.
+  appendAllTimelines(body, { currentTeam, mine, isMyTurn, revealed, awaitingSteal });
+}
+
+// UI for the blind steal-challenge window (see engine attemptSteal). The active
+// team waits (with a Reveal button); other teams that can afford it get to place
+// a counter-guess in the active team's timeline.
+function appendStealWindow(body, { currentTeam, mine, isMyTurn }) {
+  if (isMyTurn) {
+    const box = document.createElement('div');
+    box.className = 'steal-box mine';
+    box.innerHTML = `<div class="steal-title">✅ Locked in!</div>
+      <div class="steal-sub">Any other team can spend a 🎫 bonus card to challenge where this song goes. Reveal once they've had their chance.</div>`;
+    const reveal = document.createElement('button');
+    reveal.className = 'btn btn-primary btn-block';
+    reveal.style.marginTop = '10px';
+    reveal.textContent = 'Reveal now →';
+    reveal.addEventListener('click', () => socket.emit('turn:reveal'));
+    box.appendChild(reveal);
+    body.appendChild(box);
+    return;
   }
+  if (!mine || !currentTeam) return; // spectators just wait
+  const cost = snap.turn.stealCost;
+  const canAfford = (mine.tokens || 0) >= cost;
+  const box = document.createElement('div');
+  box.className = 'steal-box';
+  if (!canAfford) {
+    box.innerHTML = `<div class="steal-title">🕵️ ${escapeHtml(currentTeam.name)} placed their guess…</div>
+      <div class="steal-sub">A team with a 🎫 bonus card can challenge where it really goes. You don't have one to spend right now.</div>`;
+    body.appendChild(box);
+    return;
+  }
+  box.innerHTML = `<div class="steal-title">🕵️ Challenge ${escapeHtml(currentTeam.name)}?</div>
+    <div class="steal-sub">They placed the mystery song somewhere in their timeline. Where do <b>you</b> think it goes? Spend ${cost} 🎫 — if they were wrong and you're right, the card is yours.</div>`;
+  const tlWrap = document.createElement('div');
+  tlWrap.className = 'timeline-wrap';
+  tlWrap.innerHTML = `<div class="timeline-label">${currentTeam.emoji} ${escapeHtml(currentTeam.name)}’s timeline — pick the right spot</div>`;
+  tlWrap.appendChild(buildTimeline(currentTeam, { stealSlots: true }));
+  box.appendChild(tlWrap);
+  const bar = document.createElement('div');
+  bar.className = 'placebar';
+  const btn = document.createElement('button');
+  btn.className = 'btn btn-good';
+  btn.disabled = pendingStealSlot === null;
+  btn.textContent = pendingStealSlot === null ? 'Tap a spot above ↑' : `🕵️ Challenge — spend ${cost} 🎫`;
+  btn.addEventListener('click', () => {
+    if (pendingStealSlot === null) return;
+    socket.emit('turn:steal', { slotIndex: pendingStealSlot });
+    pendingStealSlot = null;
+  });
+  bar.appendChild(btn);
+  box.appendChild(bar);
+  body.appendChild(box);
+}
+
+// Read-only board of all teams' timelines, shown on every player's device.
+// `placingMine` (my turn, pre-reveal) skips my own team here since it's already
+// shown above with placement slots — no need to render it twice.
+function appendAllTimelines(body, { currentTeam, mine, isMyTurn, revealed, awaitingSteal }) {
+  const placingMine = isMyTurn && !revealed && !awaitingSteal;
+  const activeId = currentTeam ? currentTeam.id : null;
+  // During the steal window the active team's timeline is already shown in the
+  // challenge box above (for challengers/spectators), so don't repeat it here.
+  const skipActive = awaitingSteal && !isMyTurn;
+  const teams = snap.teams.slice().sort((a, b) => (a.id === activeId ? 0 : 1) - (b.id === activeId ? 0 : 1));
+
+  const section = document.createElement('div');
+  section.className = 'all-timelines';
+  const heading = snap.teams.length > 1 ? '📋 All timelines' : '📋 Timeline';
+  section.innerHTML = `<div class="section-label">${heading}</div>`;
+
+  teams.forEach((t) => {
+    if (placingMine && mine && t.id === mine.id) return; // shown above with slots
+    if (skipActive && t.id === activeId) return; // shown above in the challenge box
+    const isActive = t.id === activeId;
+    const isMine = mine && t.id === mine.id;
+    const wrap = document.createElement('div');
+    wrap.className = 'timeline-wrap' + (isActive ? ' tl-active' : '');
+    const tags = (isActive ? ' <span class="tl-tag playing">🎤 up now</span>' : '')
+      + (isMine ? ' <span class="tl-tag you">⭐ you</span>' : '');
+    wrap.innerHTML = `<div class="timeline-label">${t.emoji} ${escapeHtml(t.name)} · ${t.score}/${snap.target}${tokenBadgeHtml(t)}${tags}</div>`;
+    wrap.appendChild(buildTimeline(t, { withSlots: false }));
+    section.appendChild(wrap);
+  });
+  body.appendChild(section);
 }
 
 // Optional bonus round: name the song and/or artist for a free extra card.
@@ -418,26 +497,32 @@ function bonusGuessBox() {
   return box;
 }
 
-// build a timeline element; withSlots => placement slots for the active team
-function buildTimeline(team, { withSlots }) {
+// build a timeline element. withSlots => placement slots for the active team;
+// stealSlots => challenge slots (armed into pendingStealSlot) for a steal.
+function buildTimeline(team, { withSlots, stealSlots } = {}) {
   const tl = document.createElement('div');
   tl.className = 'timeline';
   const cards = team.timeline; // already sorted by year
+  const slots = withSlots || stealSlots;
 
   const addSlot = (index) => {
+    const armedIndex = stealSlots ? pendingStealSlot : pendingSlot;
     const s = document.createElement('div');
-    s.className = 'slot' + (pendingSlot === index ? ' armed' : '');
-    if (pendingSlot !== index) s.textContent = '+';
-    s.addEventListener('click', () => { pendingSlot = index; renderPlayer(); });
+    s.className = 'slot' + (armedIndex === index ? ' armed' : '');
+    if (armedIndex !== index) s.textContent = '+';
+    s.addEventListener('click', () => {
+      if (stealSlots) pendingStealSlot = index; else pendingSlot = index;
+      renderPlayer();
+    });
     tl.appendChild(s);
   };
 
-  if (withSlots) addSlot(0);
+  if (slots) addSlot(0);
   cards.forEach((c, i) => {
     tl.appendChild(makeCard(c));
-    if (withSlots) addSlot(i + 1);
+    if (slots) addSlot(i + 1);
   });
-  if (!cards.length && !withSlots) {
+  if (!cards.length && !slots) {
     const empty = document.createElement('div');
     empty.className = 'card';
     empty.innerHTML = '<span class="meta" style="display:block">no cards yet</span>';
@@ -484,21 +569,31 @@ function handleReveal() {
 // Shared by the player overlay and the table's inline reveal.
 function guessSummaryHtml(t) {
   const g = t.guesses;
-  if (!g || (!g.title && !g.artist)) return '';
-  let html = '<div class="guess-summary">';
-  if (g.title) {
-    html += `<div class="guess-line ${g.titleCorrect ? 'good' : 'bad'}">${g.titleCorrect ? '✅' : '❌'} Title guess: “${escapeHtml(g.title)}”</div>`;
+  let html = '';
+  if (g && (g.title || g.artist)) {
+    html += '<div class="guess-summary">';
+    if (g.title) {
+      html += `<div class="guess-line ${g.titleCorrect ? 'good' : 'bad'}">${g.titleCorrect ? '✅' : '❌'} Title guess: “${escapeHtml(g.title)}”</div>`;
+    }
+    if (g.artist) {
+      html += `<div class="guess-line ${g.artistCorrect ? 'good' : 'bad'}">${g.artistCorrect ? '✅' : '❌'} Artist guess: “${escapeHtml(g.artist)}”</div>`;
+    }
+    html += '</div>';
   }
-  if (g.artist) {
-    html += `<div class="guess-line ${g.artistCorrect ? 'good' : 'bad'}">${g.artistCorrect ? '✅' : '❌'} Artist guess: “${escapeHtml(g.artist)}”</div>`;
-  }
-  html += '</div>';
   if (t.tokenEarned) {
     html += `<div class="bonus-banner">🎫 Named it! +1 bonus card saved.</div>`;
   }
   if (t.randomCardDrawn) {
     const c = t.randomCardDrawn;
     html += `<div class="bonus-banner">🎲 Cashed in a bonus card: ${c.year} · ${escapeHtml(c.title)} <span class="muted">— ${escapeHtml(c.artist)}</span></div>`;
+  }
+  if (t.steal) {
+    const s = t.steal;
+    if (s.won) {
+      html += `<div class="steal-banner good">🕵️ ${s.teamEmoji} ${escapeHtml(s.teamName)} challenged and stole the card!</div>`;
+    } else {
+      html += `<div class="steal-banner bad">🕵️ ${s.teamEmoji} ${escapeHtml(s.teamName)} challenged${s.correct ? '' : ' but missed'} — no steal.</div>`;
+    }
   }
   return html;
 }
@@ -667,6 +762,7 @@ function renderTableLobby(body) {
 function renderTableGame(body) {
   const currentTeam = snap.teams.find((t) => t.id === snap.currentTeamId);
   const revealed = snap.turn && snap.turn.revealed;
+  const awaitingSteal = snap.turn && snap.turn.awaitingSteal;
   body.innerHTML = `<div class="table-grid"><div class="table-main">
       <div class="banner you" style="animation:none">${currentTeam ? currentTeam.emoji + ' ' + escapeHtml(currentTeam.name) + '’s turn' : ''}</div>
       <div class="now-playing" id="now-playing"></div>
@@ -688,6 +784,17 @@ function renderTableGame(body) {
     next.textContent = snap.winnerTeamId ? 'See the winner 🏆' : nextActionLabel(t);
     next.addEventListener('click', () => socket.emit('turn:advance'));
     np.appendChild(next);
+  } else if (awaitingSteal) {
+    np.innerHTML = `<div class="now-playing-info">
+        <div style="font-weight:800">🕵️ Challenge window open</div>
+        <div class="muted">${currentTeam ? escapeHtml(currentTeam.name) + ' locked in' : ''} — another team can spend a 🎫 bonus card to challenge where the song goes. Reveal once they’ve had their chance.</div>
+      </div>`;
+    const reveal = document.createElement('button');
+    reveal.className = 'btn btn-primary btn-sm';
+    reveal.style.marginLeft = 'auto';
+    reveal.textContent = 'Reveal now →';
+    reveal.addEventListener('click', () => socket.emit('turn:reveal'));
+    np.appendChild(reveal);
   } else {
     const risk = snap.wrongGuessPolicy === 'lose' && snap.turn.runGainsCount > 0
       ? `<div class="risk-banner" style="margin:6px 0 0">⚠️ ${snap.turn.runGainsCount} card${snap.turn.runGainsCount === 1 ? '' : 's'} at risk this turn</div>` : '';
@@ -866,6 +973,7 @@ const POWER_DEFS = [
   { key: 'saveWinnings', emoji: '🛟', label: 'Save your winnings', hint: "about to lose this turn's cards? pay to keep them" },
   { key: 'yearMargin', emoji: '📏', label: 'Year margin', hint: 'missed by a little? pay to count it as correct' },
   { key: 'randomCard', emoji: '🎲', label: 'Random card', hint: 'pay for a guaranteed card, straight onto your timeline' },
+  { key: 'steal', emoji: '🕵️', label: 'Steal (challenge)', hint: "after another team places, pay to say where it really goes — steal the card if they were wrong" },
 ];
 
 // What each enabled power currently costs, per the table's settings — shown

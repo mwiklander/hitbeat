@@ -204,9 +204,28 @@ input:focus { outline: none; border-color: var(--accent); }
 }
 .now-playing-info { flex: 1; display: flex; flex-direction: column; gap: 6px; text-align: left; }
 
+/* ---------- steal / challenge window ---------- */
+.steal-box { background: var(--panel); border: 1px solid var(--accent-2); border-radius: 14px; padding: 14px; margin: 6px 0 10px; }
+.steal-box.mine { border-color: var(--gold); text-align: center; }
+.steal-title { font-weight: 900; font-size: 16px; margin-bottom: 4px; }
+.steal-sub { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+.steal-banner {
+  margin-top: 12px; padding: 10px 14px; border-radius: 12px; font-weight: 800; font-size: 14px; text-align: left;
+}
+.steal-banner.good { background: rgba(77,208,225,.18); border: 1px solid var(--accent-2); color: #bff4fb; }
+.steal-banner.bad { background: rgba(255,255,255,.06); border: 1px solid var(--stroke); color: var(--muted); }
+
 /* ---------- timeline ---------- */
 .timeline-wrap { margin: 8px 0 4px; }
-.timeline-label { display: flex; align-items: center; gap: 8px; font-weight: 800; margin: 0 4px 6px; }
+.timeline-label { display: flex; align-items: center; gap: 8px; font-weight: 800; margin: 0 4px 6px; flex-wrap: wrap; }
+
+/* All-teams board on each player's device */
+.all-timelines { margin-top: 18px; border-top: 1px solid var(--stroke); padding-top: 8px; }
+.section-label { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 4px 4px 8px; font-weight: 800; }
+.timeline-wrap.tl-active { background: rgba(255,77,141,.08); border: 1px solid rgba(255,77,141,.35); border-radius: 14px; padding: 8px 8px 2px; }
+.tl-tag { font-size: 11px; font-weight: 800; border-radius: 999px; padding: 2px 8px; }
+.tl-tag.playing { background: rgba(255,77,141,.2); color: var(--accent); }
+.tl-tag.you { background: rgba(255,213,79,.18); color: var(--gold); }
 .timeline {
   display: flex; align-items: stretch; gap: 6px; overflow-x: auto; padding: 6px 4px 12px;
   scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch;
