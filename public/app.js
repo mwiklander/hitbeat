@@ -52,6 +52,10 @@ function boot() {
   const saved = store.get();
 
   buildEmojiGrid();
+  // Before any of the early returns below: a phone arriving from the QR code
+  // takes the joinParam path, and that phone is exactly the one that may end
+  // up as the DJ receiving play cues.
+  initJukebox();
 
   if (joinParam) {
     joinCode = joinParam;
@@ -84,7 +88,7 @@ function resumeHost(code) {
       role = 'host'; joinCode = res.code;
       tableQR = res.qr; tableJoinUrl = res.joinUrl;
       showView('table');
-      initJukebox();
+      initTableSpotify();
     } else {
       store.clear();
       showView('landing');
@@ -102,7 +106,7 @@ el('btn-be-table').addEventListener('click', () => {
     tableQR = res.qr; tableJoinUrl = res.joinUrl;
     store.set({ role: 'host', code: res.code });
     showView('table');
-    initJukebox();
+    initTableSpotify();
   });
 });
 
@@ -203,6 +207,9 @@ function renderPlayerLobby(body) {
   hint.className = 'hint';
   hint.textContent = mine ? 'You’re in! Wait for the table to start, or hop teams.' : 'Join a team or start your own. Teams can be any size 🎉';
   body.appendChild(hint);
+
+  const djLobby = djPanel();
+  if (djLobby) body.appendChild(djLobby);
 
   if (snap.themeName) {
     const badge = document.createElement('div');
@@ -309,6 +316,9 @@ function renderPlayerGame(body) {
   }
 
   body.innerHTML = '';
+
+  const djGame = djPanel();
+  if (djGame) body.appendChild(djGame);
 
   const streak = (snap.turn && snap.turn.streak) || 0;
   const pastCap = snap.maxStreak > 0 && streak >= snap.maxStreak;
@@ -741,20 +751,29 @@ function renderTableLobby(body) {
   teamsBox.innerHTML = '<div class="section-title">Teams <span class="muted" style="text-transform:none;font-weight:600">— reassign players or remove empty teams</span></div>';
   teamsBox.appendChild(teamManagementConsole());
 
-  el('spotify-slot').appendChild(spotifyStatusEl());
+  const audioSlot = el('spotify-slot');
+  audioSlot.innerHTML = '';
+  audioSlot.appendChild(audioModeEl());
+  // The Web Playback SDK only matters when this machine is the one playing.
+  if (snap.audioMode === 'table') audioSlot.appendChild(spotifyStatusEl());
 
   const startBtn = el('btn-start');
   const canStart = teamsWithMembers.length >= 1;
   startBtn.disabled = !canStart;
-  el('start-hint').textContent = canStart
-    ? (jukeboxReady ? '' : '↑ Connect Spotify so songs can play (Premium)')
-    : 'Waiting for at least one team with a player…';
+  el('start-hint').textContent = !canStart
+    ? 'Waiting for at least one team with a player…'
+    : snap.audioMode === 'dj'
+      ? (snap.djPlayerId ? '' : '↑ Nobody is the DJ yet — no music will play')
+      : (jukeboxReady ? '' : '↑ Connect Spotify so songs can play (Premium)');
   startBtn.addEventListener('click', () => {
-    if (spotifyConfigured && !jukeboxReady) {
+    if (snap.audioMode === 'dj' && !snap.djPlayerId) {
+      const go = confirm('Nobody has taken the DJ role yet, so no music will play.\n\nClick Cancel, then have the person with the speaker tap “I’m the DJ” on their phone.\nOr click OK to start without music.');
+      if (!go) return;
+    } else if (snap.audioMode === 'table' && spotifyConfigured && !jukeboxReady) {
       const go = confirm('Spotify isn’t connected yet — no music will play.\n\nClick Cancel, then tap “Connect” above and log in (Premium account).\nOr click OK to play without music.');
       if (!go) return;
     }
-    SpotifyJukebox.activate(); // unlock audio within this user gesture
+    if (snap.audioMode === 'table') SpotifyJukebox.activate(); // unlock audio within this user gesture
     socket.emit('game:start', {}, (res) => { if (res && !res.ok) alert(res.error); });
   });
 }
@@ -823,7 +842,14 @@ function renderTableGame(body) {
   const status = document.createElement('div');
   status.className = 'qr-cap';
   status.style.textAlign = 'left';
-  if (jukeboxError) status.innerHTML = `<span style="color:var(--bad)">⚠️ ${escapeHtml(jukeboxError)}</span>`;
+  if (snap.audioMode === 'dj') {
+    // The table holds no Spotify connection in this mode — the only thing that
+    // can go wrong here is that nobody is holding the DJ role.
+    status.textContent = snap.djPlayerId
+      ? `🔊 ${djName()} is the DJ — playing from their phone`
+      : '🔇 Nobody is the DJ — a player needs to tap “I’m the DJ”';
+  }
+  else if (jukeboxError) status.innerHTML = `<span style="color:var(--bad)">⚠️ ${escapeHtml(jukeboxError)}</span>`;
   else if (!spotifyConfigured) status.textContent = '🔇 Spotify not configured — no music (see README).';
   else if (!jukeboxToken) status.innerHTML = '🔇 Spotify not connected. <b>Reset to lobby and click Connect.</b>';
   else if (!jukeboxReady) status.textContent = '⏳ Spotify connecting…';
@@ -1215,17 +1241,33 @@ let jukeboxSig = '';
 let availableThemes = [];
 let lastReportedFailure = ''; // dedupe guard so the same failure isn't reported twice
 
+let jukeboxInited = false;
 function initJukebox() {
+  if (jukeboxInited) return; // registering the socket handlers twice would double-fire
+  jukeboxInited = true;
   fetch('/themes').then((r) => r.json()).then((t) => {
     availableThemes = t;
     if (role === 'host' && snap && snap.phase === 'lobby') renderTable();
   }).catch(() => {});
 
-  socket.on('jukebox:play', ({ card }) => {
+  socket.on('jukebox:play', (payload = {}) => {
     jukeboxStalled = null; // a fresh card being cued means we're no longer stuck
-    if (role === 'host') SpotifyJukebox.play(card);
+    // DJ mode sends only an id, and only to the DJ's device. Table mode sends
+    // the whole card to the host, which needs it to search the Web API.
+    if (payload.spotifyId !== undefined) {
+      djTrack = { turnId: payload.turnId, spotifyId: payload.spotifyId, linkStyle: payload.linkStyle };
+      if (role === 'player') renderPlayer();
+      return;
+    }
+    if (role === 'host') SpotifyJukebox.play(payload.card);
   });
-  socket.on('jukebox:stop', () => { if (role === 'host') SpotifyJukebox.pause(); });
+  socket.on('jukebox:stop', () => {
+    // Nothing can stop playback in DJ mode — Spotify owns it — so just retire
+    // the stale play button rather than leaving it tappable.
+    djTrack = null;
+    if (role === 'host') SpotifyJukebox.pause();
+    else if (role === 'player') renderPlayer();
+  });
   // Several song failures in a row — the server paused auto-redraw rather
   // than silently burning through the whole theme. Surface it clearly so the
   // table knows to check the Spotify connection instead of just seeing dead air.
@@ -1256,7 +1298,166 @@ function initJukebox() {
     const sig = [s.ready, s.hasDevice, s.token, s.configured, s.playing, s.error, (s.diag || []).length].join('|');
     if (sig !== jukeboxSig) { jukeboxSig = sig; if (role === 'host') renderTable(); }
   };
+}
+
+// Only the table ever runs Spotify's player. Kept separate from initJukebox so
+// player phones still get the socket wiring without spinning up an SDK they
+// have no use for.
+function initTableSpotify() {
+  initJukebox();
   SpotifyJukebox.init();
+}
+
+
+// ===========================================================================
+// The DJ — one phone plays each song in its own Spotify app
+// ===========================================================================
+// Only the Spotify id ever reaches this device (see cueAudio in server.js), so
+// nothing rendered here can give the answer away before Spotify itself does.
+let djTrack = null; // { turnId, spotifyId, linkStyle }
+
+function iAmDj() { return !!(snap && myId && snap.djPlayerId === myId); }
+
+function djName() {
+  if (!snap || !snap.djPlayerId) return null;
+  const p = [...allPlayers()].find((x) => x.id === snap.djPlayerId);
+  return p ? `${p.emoji} ${p.name}` : 'someone';
+}
+
+// The custom scheme is handed straight to the Spotify app by iOS. The https
+// link is smoother when it works, but only reaches the app on a phone that has
+// opened Spotify from a link before — otherwise it quietly lands in Spotify's
+// web player, which cannot use the phone's Bluetooth output and shows the
+// title immediately. Hence scheme by default.
+function djDeepLink(spotifyId, style) {
+  return style === 'https'
+    ? 'https://open.spotify.com/track/' + spotifyId
+    : 'spotify:track:' + spotifyId;
+}
+
+function djPanel() {
+  if (!snap || snap.audioMode !== 'dj') return null;
+
+  // Someone else is holding it — everyone else just needs to know who.
+  if (snap.djPlayerId && !iAmDj()) {
+    const note = document.createElement('p');
+    note.className = 'hint';
+    note.textContent = `🔊 ${djName()} is the DJ`;
+    return note;
+  }
+
+  const box = document.createElement('div');
+  box.className = 'card';
+
+  // Nobody has claimed it. The role follows the phone that is paired to the
+  // speaker, so only a player (not the table) can take it.
+  if (!snap.djPlayerId) {
+    if (role !== 'player') return null;
+    const h = document.createElement('div');
+    h.className = 'section-title';
+    h.textContent = '🔊 Who has the speaker?';
+    box.appendChild(h);
+    const p = document.createElement('p');
+    p.className = 'hint';
+    p.textContent = 'The DJ’s phone plays every song in its own Spotify app, so the sound comes out wherever that phone is connected. Whoever is paired to the speaker should take this.';
+    box.appendChild(p);
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-primary btn-block';
+    btn.textContent = '🎧 I’m the DJ';
+    btn.addEventListener('click', () => socket.emit('dj:claim', {}, (res) => {
+      if (res && !res.ok) alert(res.error || 'Could not take the DJ role.');
+    }));
+    box.appendChild(btn);
+    return box;
+  }
+
+  // It's me.
+  const h = document.createElement('div');
+  h.className = 'section-title';
+  h.textContent = '🎧 You’re the DJ';
+  box.appendChild(h);
+
+  const cued = djTrack && snap.turn && djTrack.turnId === snap.turn.id;
+
+  if (cued && djTrack.spotifyId) {
+    // A real anchor, not a scripted navigation: iOS is far more willing to
+    // hand a tapped link to another app than a programmatic location change.
+    const a = document.createElement('a');
+    a.className = 'btn btn-good btn-block';
+    // Live session setting first, cue-time value only as a fallback: the DJ
+    // flips this precisely because the current link isn't opening, so it has to
+    // affect the button in front of them, not just the next song.
+    a.href = djDeepLink(djTrack.spotifyId, snap.linkStyle || djTrack.linkStyle);
+    a.rel = 'noreferrer';
+    a.textContent = '▶︎ Play the song';
+    box.appendChild(a);
+    const p = document.createElement('p');
+    p.className = 'hint';
+    p.textContent = 'Spotify takes over and starts playing on its own — turn the phone face down, then come back here.';
+    box.appendChild(p);
+  } else if (cued && !djTrack.spotifyId) {
+    const p = document.createElement('p');
+    p.className = 'hint';
+    p.textContent = 'This song has no Spotify id yet — ask the table to redraw it.';
+    box.appendChild(p);
+  } else {
+    const p = document.createElement('p');
+    p.className = 'hint';
+    p.textContent = 'Waiting for the next song…';
+    box.appendChild(p);
+  }
+
+  // Which link style actually reaches the app varies by phone, so let the DJ
+  // switch it here rather than walking back to the table.
+  const usingHttps = snap.linkStyle === 'https';
+  const styleBtn = document.createElement('button');
+  styleBtn.className = 'btn btn-ghost btn-sm';
+  styleBtn.textContent = usingHttps
+    ? 'Landing in the browser? Switch to app links'
+    : 'Spotify not opening? Switch to browser links';
+  styleBtn.addEventListener('click', () => socket.emit('audio:linkStyle', { style: usingHttps ? 'scheme' : 'https' }));
+  box.appendChild(styleBtn);
+
+  const hand = document.createElement('button');
+  hand.className = 'btn btn-ghost btn-sm';
+  hand.textContent = 'Hand the DJ role over';
+  hand.addEventListener('click', () => socket.emit('dj:release'));
+  box.appendChild(hand);
+
+  return box;
+}
+
+// Table lobby: where the music comes out.
+function audioModeEl() {
+  const box = document.createElement('div');
+  box.className = 'card';
+  const h = document.createElement('div');
+  h.className = 'section-title';
+  h.textContent = '🔈 Where does the music play?';
+  box.appendChild(h);
+
+  const opts = [
+    { mode: 'dj', label: '🎧 A player’s phone (DJ)', blurb: 'No Spotify setup at all. One phone opens each song in its own Spotify app and plays through whatever it’s connected to.' },
+    { mode: 'table', label: '💻 This machine', blurb: 'Needs a Spotify Premium login here and speakers attached — but no player ever sees a track.' },
+  ];
+  opts.forEach((o) => {
+    const b = document.createElement('button');
+    b.className = 'btn btn-block ' + (snap.audioMode === o.mode ? 'btn-good' : 'btn-ghost');
+    b.style.textAlign = 'left';
+    b.innerHTML = `<strong>${o.label}</strong><br><small class="muted">${escapeHtml(o.blurb)}</small>`;
+    b.addEventListener('click', () => socket.emit('audio:mode', { mode: o.mode }));
+    box.appendChild(b);
+  });
+
+  if (snap.audioMode === 'dj') {
+    const p = document.createElement('p');
+    p.className = 'hint';
+    p.textContent = snap.djPlayerId
+      ? `🔊 ${djName()} is the DJ.`
+      : 'Nobody has taken the DJ role yet — a player picks it up on their phone.';
+    box.appendChild(p);
+  }
+  return box;
 }
 
 function escapeHtml(s) {

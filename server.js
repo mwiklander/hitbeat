@@ -39,7 +39,7 @@ function loadThemes() {
       const t = JSON.parse(fs.readFileSync(path.join(themesDir, f), 'utf8'));
       const songs = (t.songs || [])
         .filter((s) => s && s.title && s.artist && Number.isFinite(Number(s.year)))
-        .map((s, i) => ({ id: i + 1, title: s.title, artist: s.artist, year: Number(s.year) }));
+        .map((s, i) => ({ id: i + 1, title: s.title, artist: s.artist, year: Number(s.year), spotifyId: s.spotifyId || null }));
       if (!songs.length) { console.warn(`⚠️  Theme ${f} has no valid songs, skipping.`); continue; }
       list.push({
         id: t.id || path.basename(f, '.json'),
@@ -60,6 +60,14 @@ function loadThemes() {
 THEMES = loadThemes();
 const themeById = (id) => THEMES.find((t) => t.id === id) || THEMES.find((t) => t.id === 'mixed') || THEMES[0];
 console.log(`🎼  Loaded ${THEMES.length} theme(s): ${THEMES.map((t) => `${t.emoji} ${t.name} (${t.songs.length})`).join(', ')}`);
+{
+  const withId = THEMES.map((t) => ({ t, n: t.songs.filter((s) => s.spotifyId).length }));
+  const full = withId.filter(({ t, n }) => n === t.songs.length);
+  const partial = withId.filter(({ t, n }) => n > 0 && n < t.songs.length);
+  console.log(`🔗  DJ mode plays songs with a baked Spotify id — ${full.length} theme(s) fully ready: ${full.map(({ t }) => t.emoji + ' ' + t.name).join(', ') || '(none yet)'}`);
+  if (partial.length) console.log(`    Partly resolved (playable, smaller pool): ${partial.map(({ t, n }) => `${t.name} ${n}/${t.songs.length}`).join(', ')}`);
+  console.log('    Resolve more with:  node scripts/resolve-track-ids.js');
+}
 
 // --- songs known not to play on Spotify -------------------------------------
 // Persisted so a track that failed once (no match found, or Spotify refused
@@ -133,7 +141,12 @@ const sessions = new Map();
 function applyTheme(session, themeId) {
   const theme = themeById(themeId);
   if (!theme) return;
-  session.songs = theme.songs.filter((s) => !brokenSongs.has(brokenSongKey(s)));
+  let pool = theme.songs.filter((s) => !brokenSongs.has(brokenSongKey(s)));
+  // In DJ mode a song is only playable via its baked-in Spotify id, so one
+  // without an id cannot be played at all — drop it from the pool rather than
+  // deal a card whose play button would do nothing.
+  if (session.audioMode === 'dj') pool = pool.filter((s) => s.spotifyId);
+  session.songs = pool;
   session.target = theme.target;
   session.themeId = theme.id;
   session.themeName = theme.name;
@@ -181,8 +194,24 @@ function broadcast(session) {
 // the Spotify track itself (official search) and plays it — the card identity
 // is sent ONLY to the host, never broadcast, so players can't peek.
 function cueAudio(session) {
-  if (!session.hostSocketId || !session.turn || session.turn.revealed) return;
+  if (!session.turn || session.turn.revealed) return;
   const c = session.turn.card;
+
+  if (session.audioMode === 'dj') {
+    if (!session.djPlayerId) return; // nobody is holding the role yet
+    // ONLY the Spotify id crosses the wire. The DJ's phone is in a player's
+    // hand, so title/artist/year must never reach its DOM — the id alone is
+    // enough to build the deep link, and Spotify reveals no more than the DJ
+    // would see anyway once the app opens.
+    io.to('player:' + session.djPlayerId).emit('jukebox:play', {
+      turnId: session.turn.id,
+      spotifyId: c.spotifyId || null,
+      linkStyle: session.linkStyle,
+    });
+    return;
+  }
+
+  if (!session.hostSocketId) return;
   io.to(session.hostSocketId).emit('jukebox:play', {
     turnId: session.turn.id,
     card: { id: c.id, title: c.title, artist: c.artist, year: c.year },
@@ -233,6 +262,7 @@ io.on('connection', (socket) => {
     }
     socket.data = { code: session.code, role: 'player', playerId: player.id };
     socket.join(session.code);
+    socket.join('player:' + player.id); // addressable by identity, survives reconnects
     if (ack) ack({ ok: true, code: session.code, playerId: player.id });
     broadcast(session);
   });
@@ -244,6 +274,53 @@ io.on('connection', (socket) => {
     if (session) fn(session);
     return session;
   }
+
+  // ---- the DJ: one device plays the music in its own Spotify app ----------
+  socket.on('dj:claim', (_d, ack) => {
+    withSession((session) => {
+      const pid = socket.data.playerId;
+      if (!pid) { if (ack) ack({ ok: false, error: 'Join as a player first, then take the DJ role.' }); return; }
+      session.djPlayerId = pid;
+      if (ack) ack({ ok: true });
+      broadcast(session);
+      // A song may already be waiting on a turn that started before anyone
+      // claimed the role — hand it straight over rather than stalling.
+      if (session.phase === 'playing') cueAudio(session);
+    });
+  });
+
+  socket.on('dj:release', () => {
+    withSession((session) => {
+      if (session.djPlayerId !== socket.data.playerId && socket.data.role !== 'host') return;
+      session.djPlayerId = null;
+      broadcast(session);
+    });
+  });
+
+  socket.on('audio:mode', ({ mode } = {}) => {
+    withSession((session) => {
+      if (socket.data.role !== 'host') return;
+      if (session.phase !== 'lobby') return;
+      if (mode !== 'dj' && mode !== 'table') return;
+      session.audioMode = mode;
+      applyTheme(session, session.themeId); // the playable pool depends on the mode
+      broadcast(session);
+    });
+  });
+
+  // Which flavour of deep link reaches the Spotify app is a property of the
+  // DJ's phone, not of the game, so let it be switched per session: the custom
+  // scheme always reaches the app (with an occasional "Open in Spotify?"
+  // prompt), while the https link is smoother but falls back to Spotify's web
+  // player on a phone that has never opened the app from a link before.
+  socket.on('audio:linkStyle', ({ style } = {}) => {
+    withSession((session) => {
+      if (socket.data.role !== 'host' && session.djPlayerId !== socket.data.playerId) return;
+      if (style !== 'scheme' && style !== 'https') return;
+      session.linkStyle = style;
+      broadcast(session);
+    });
+  });
 
   socket.on('theme:select', ({ themeId } = {}) => {
     withSession((session) => {
