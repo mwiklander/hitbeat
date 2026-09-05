@@ -754,6 +754,8 @@ function renderTableLobby(body) {
   const audioSlot = el('spotify-slot');
   audioSlot.innerHTML = '';
   audioSlot.appendChild(audioModeEl());
+  const djLobbyPanel = djPanel();
+  if (djLobbyPanel) audioSlot.appendChild(djLobbyPanel);
   // The Web Playback SDK only matters when this machine is the one playing.
   if (snap.audioMode === 'table') audioSlot.appendChild(spotifyStatusEl());
 
@@ -763,10 +765,10 @@ function renderTableLobby(body) {
   el('start-hint').textContent = !canStart
     ? 'Waiting for at least one team with a player…'
     : snap.audioMode === 'dj'
-      ? (snap.djPlayerId ? '' : '↑ Nobody is the DJ yet — no music will play')
+      ? (djTaken() ? '' : '↑ Nobody is the DJ yet — no music will play')
       : (jukeboxReady ? '' : '↑ Connect Spotify so songs can play (Premium)');
   startBtn.addEventListener('click', () => {
-    if (snap.audioMode === 'dj' && !snap.djPlayerId) {
+    if (snap.audioMode === 'dj' && !djTaken()) {
       const go = confirm('Nobody has taken the DJ role yet, so no music will play.\n\nClick Cancel, then have the person with the speaker tap “I’m the DJ” on their phone.\nOr click OK to start without music.');
       if (!go) return;
     } else if (snap.audioMode === 'table' && spotifyConfigured && !jukeboxReady) {
@@ -845,9 +847,11 @@ function renderTableGame(body) {
   if (snap.audioMode === 'dj') {
     // The table holds no Spotify connection in this mode — the only thing that
     // can go wrong here is that nobody is holding the DJ role.
-    status.textContent = snap.djPlayerId
-      ? `🔊 ${djName()} is the DJ — playing from their phone`
-      : '🔇 Nobody is the DJ — a player needs to tap “I’m the DJ”';
+    status.textContent = djTaken()
+      ? `🔊 ${djName()} is the DJ`
+      : '🔇 Nobody is the DJ — someone needs to tap “I’m the DJ”';
+    const p = djPanel();
+    if (p && iAmDj()) el('table-teams').before(p);
   }
   else if (jukeboxError) status.innerHTML = `<span style="color:var(--bad)">⚠️ ${escapeHtml(jukeboxError)}</span>`;
   else if (!spotifyConfigured) status.textContent = '🔇 Spotify not configured — no music (see README).';
@@ -1316,9 +1320,14 @@ function initTableSpotify() {
 // nothing rendered here can give the answer away before Spotify itself does.
 let djTrack = null; // { turnId, spotifyId, linkStyle }
 
-function iAmDj() { return !!(snap && myId && snap.djPlayerId === myId); }
+function iAmDj() {
+  if (!snap) return false;
+  return role === 'host' ? !!snap.djIsHost : !!(myId && snap.djPlayerId === myId);
+}
+function djTaken() { return !!(snap && (snap.djPlayerId || snap.djIsHost)); }
 
 function djName() {
+  if (snap && snap.djIsHost) return 'This screen';
   if (!snap || !snap.djPlayerId) return null;
   const p = [...allPlayers()].find((x) => x.id === snap.djPlayerId);
   return p ? `${p.emoji} ${p.name}` : 'someone';
@@ -1339,7 +1348,7 @@ function djPanel() {
   if (!snap || snap.audioMode !== 'dj') return null;
 
   // Someone else is holding it — everyone else just needs to know who.
-  if (snap.djPlayerId && !iAmDj()) {
+  if (djTaken() && !iAmDj()) {
     const note = document.createElement('p');
     note.className = 'hint';
     note.textContent = `🔊 ${djName()} is the DJ`;
@@ -1347,23 +1356,22 @@ function djPanel() {
   }
 
   const box = document.createElement('div');
-  box.className = 'card';
+  box.className = 'audio-panel';
 
   // Nobody has claimed it. The role follows the phone that is paired to the
   // speaker, so only a player (not the table) can take it.
-  if (!snap.djPlayerId) {
-    if (role !== 'player') return null;
+  if (!djTaken()) {
     const h = document.createElement('div');
     h.className = 'section-title';
     h.textContent = '🔊 Who has the speaker?';
     box.appendChild(h);
     const p = document.createElement('p');
     p.className = 'hint';
-    p.textContent = 'The DJ’s phone plays every song in its own Spotify app, so the sound comes out wherever that phone is connected. Whoever is paired to the speaker should take this.';
+    p.textContent = 'The DJ’s device plays every song in its own Spotify app, so the sound comes out wherever that device is connected. Whoever is paired to the speaker should take this.';
     box.appendChild(p);
     const btn = document.createElement('button');
     btn.className = 'btn btn-primary btn-block';
-    btn.textContent = '🎧 I’m the DJ';
+    btn.textContent = role === 'host' ? '🎧 This device is the DJ' : '🎧 I’m the DJ';
     btn.addEventListener('click', () => socket.emit('dj:claim', {}, (res) => {
       if (res && !res.ok) alert(res.error || 'Could not take the DJ role.');
     }));
@@ -1374,7 +1382,7 @@ function djPanel() {
   // It's me.
   const h = document.createElement('div');
   h.className = 'section-title';
-  h.textContent = '🎧 You’re the DJ';
+  h.textContent = role === 'host' ? '🎧 This device is the DJ' : '🎧 You’re the DJ';
   box.appendChild(h);
 
   const cued = djTrack && snap.turn && djTrack.turnId === snap.turn.id;
@@ -1383,7 +1391,7 @@ function djPanel() {
     // A real anchor, not a scripted navigation: iOS is far more willing to
     // hand a tapped link to another app than a programmatic location change.
     const a = document.createElement('a');
-    a.className = 'btn btn-good btn-block';
+    a.className = 'btn btn-good btn-block btn-play';
     // Live session setting first, cue-time value only as a fallback: the DJ
     // flips this precisely because the current link isn't opening, so it has to
     // affect the button in front of them, not just the next song.
@@ -1430,7 +1438,7 @@ function djPanel() {
 // Table lobby: where the music comes out.
 function audioModeEl() {
   const box = document.createElement('div');
-  box.className = 'card';
+  box.className = 'audio-panel';
   const h = document.createElement('div');
   h.className = 'section-title';
   h.textContent = '🔈 Where does the music play?';
@@ -1443,20 +1451,11 @@ function audioModeEl() {
   opts.forEach((o) => {
     const b = document.createElement('button');
     b.className = 'btn btn-block ' + (snap.audioMode === o.mode ? 'btn-good' : 'btn-ghost');
-    b.style.textAlign = 'left';
     b.innerHTML = `<strong>${o.label}</strong><br><small class="muted">${escapeHtml(o.blurb)}</small>`;
     b.addEventListener('click', () => socket.emit('audio:mode', { mode: o.mode }));
     box.appendChild(b);
   });
 
-  if (snap.audioMode === 'dj') {
-    const p = document.createElement('p');
-    p.className = 'hint';
-    p.textContent = snap.djPlayerId
-      ? `🔊 ${djName()} is the DJ.`
-      : 'Nobody has taken the DJ role yet — a player picks it up on their phone.';
-    box.appendChild(p);
-  }
   return box;
 }
 

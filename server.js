@@ -198,12 +198,15 @@ function cueAudio(session) {
   const c = session.turn.card;
 
   if (session.audioMode === 'dj') {
-    if (!session.djPlayerId) return; // nobody is holding the role yet
+    // The host device can hold the role too: run headless on the Mac mini and
+    // the first phone to open the page is both the board and the jukebox.
+    const target = session.djIsHost ? session.hostSocketId : (session.djPlayerId ? 'player:' + session.djPlayerId : null);
+    if (!target) return; // nobody is holding the role yet
     // ONLY the Spotify id crosses the wire. The DJ's phone is in a player's
     // hand, so title/artist/year must never reach its DOM — the id alone is
     // enough to build the deep link, and Spotify reveals no more than the DJ
     // would see anyway once the app opens.
-    io.to('player:' + session.djPlayerId).emit('jukebox:play', {
+    io.to(target).emit('jukebox:play', {
       turnId: session.turn.id,
       spotifyId: c.spotifyId || null,
       linkStyle: session.linkStyle,
@@ -279,8 +282,16 @@ io.on('connection', (socket) => {
   socket.on('dj:claim', (_d, ack) => {
     withSession((session) => {
       const pid = socket.data.playerId;
-      if (!pid) { if (ack) ack({ ok: false, error: 'Join as a player first, then take the DJ role.' }); return; }
-      session.djPlayerId = pid;
+      if (socket.data.role === 'host') {
+        session.djIsHost = true;
+        session.djPlayerId = null;
+      } else if (pid) {
+        session.djPlayerId = pid;
+        session.djIsHost = false;
+      } else {
+        if (ack) ack({ ok: false, error: 'Join as a player first, then take the DJ role.' });
+        return;
+      }
       if (ack) ack({ ok: true });
       broadcast(session);
       // A song may already be waiting on a turn that started before anyone
@@ -293,6 +304,7 @@ io.on('connection', (socket) => {
     withSession((session) => {
       if (session.djPlayerId !== socket.data.playerId && socket.data.role !== 'host') return;
       session.djPlayerId = null;
+      session.djIsHost = false;
       broadcast(session);
     });
   });
@@ -615,11 +627,16 @@ setInterval(() => {
 
 server.listen(PORT, '0.0.0.0', () => {
   const lan = lanAddress();
-  console.log('\n🎵  Hitster (LAN edition) is live!');
-  console.log(`   Jukebox / table:  http://127.0.0.1:${PORT}   ← open this on the machine with the speakers`);
-  console.log(`   Players join at:  http://${lan}:${PORT}       ← or just scan the QR on the table screen`);
+  console.log('\n🎵  Hitbeat is live!');
+  console.log(`   Everyone opens:  http://${lan}:${PORT}`);
+  console.log('   The first device to tap "Start a new game" becomes the board and shows');
+  console.log('   the code for everyone else to scan. No screen needed on this machine.');
+  console.log(`   Also on this machine, if you want the board here:  http://127.0.0.1:${PORT}`);
   if (!CLIENT_ID) {
-    console.log('\n⚠️  No SPOTIFY_CLIENT_ID set yet. Copy .env.example to .env and add your Client ID.');
+    // Only 'table' audio mode needs this — DJ mode plays through a phone's own
+    // Spotify app and needs no credentials here at all.
+    console.log('\n💡  No SPOTIFY_CLIENT_ID set. Fine for DJ mode; only needed if you want');
+    console.log('    this machine to be the Spotify player itself ("This machine" audio mode).');
   }
   console.log('');
 });

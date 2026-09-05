@@ -264,6 +264,22 @@ input:focus { outline: none; border-color: var(--accent); }
 .card.landed-good { border-color: var(--good); box-shadow: 0 0 0 2px var(--good) inset; }
 .card.landed-bad { border-color: var(--bad); box-shadow: 0 0 0 2px var(--bad) inset; }
 
+/* ---------- audio / DJ panel ---------- */
+/* Deliberately NOT .card — that is the 78x104 timeline mini-card. */
+.audio-panel {
+  border-radius: 16px; padding: 14px; border: 1px solid var(--stroke);
+  background: var(--panel); display: flex; flex-direction: column; gap: 8px;
+}
+.audio-panel .section-title { margin: 0; }
+.audio-panel .hint { margin: 0; }
+.audio-panel .btn { white-space: normal; line-height: 1.35; text-align: left; }
+.audio-panel .btn small { display: block; font-weight: 500; margin-top: 3px; line-height: 1.3; }
+/* The selected option sits on light green — muted purple is unreadable there,
+   and white is only ~1.9:1. Dark text gets it to roughly 8:1. */
+.audio-panel .btn-good, .audio-panel .btn-good small.muted { color: #06240f; }
+.audio-panel a.btn { text-align: center; text-decoration: none; }
+.audio-panel .btn-play { font-size: 20px; padding: 18px; }
+
 /* ---------- place bar ---------- */
 .placebar { position: sticky; bottom: 0; padding: 12px 0 calc(var(--safe-bottom)); background: linear-gradient(to top, var(--bg-2) 60%, transparent); display: flex; gap: 10px; }
 .placebar .btn { flex: 1; }
