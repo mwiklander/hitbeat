@@ -1261,6 +1261,7 @@ function initJukebox() {
     if (payload.spotifyId !== undefined) {
       djTrack = { turnId: payload.turnId, spotifyId: payload.spotifyId, linkStyle: payload.linkStyle };
       if (role === 'player') renderPlayer();
+      else if (role === 'host') renderTable(); // the host may be the DJ itself
       return;
     }
     if (role === 'host') SpotifyJukebox.play(payload.card);
@@ -1269,7 +1270,7 @@ function initJukebox() {
     // Nothing can stop playback in DJ mode — Spotify owns it — so just retire
     // the stale play button rather than leaving it tappable.
     djTrack = null;
-    if (role === 'host') SpotifyJukebox.pause();
+    if (role === 'host') { SpotifyJukebox.pause(); renderTable(); }
     else if (role === 'player') renderPlayer();
   });
   // Several song failures in a row — the server paused auto-redraw rather
@@ -1327,7 +1328,7 @@ function iAmDj() {
 function djTaken() { return !!(snap && (snap.djPlayerId || snap.djIsHost)); }
 
 function djName() {
-  if (snap && snap.djIsHost) return 'This screen';
+  if (snap && snap.djIsHost) return 'The table';
   if (!snap || !snap.djPlayerId) return null;
   const p = [...allPlayers()].find((x) => x.id === snap.djPlayerId);
   return p ? `${p.emoji} ${p.name}` : 'someone';
