@@ -15,6 +15,21 @@ const { Session } = require('./lib/game');
 const PORT = Number(process.env.PORT || 8080);
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID || '';
 const REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI || `http://127.0.0.1:${PORT}/callback`;
+
+// Where players should be told to go. Unset, the QR code points at this
+// machine's LAN address, which is right for a game in one room and useless
+// from anywhere else. Set it to a public origin (a tunnel hostname, say) and
+// the QR, the join link and the banner all follow — otherwise remote players
+// get handed a 192.168.x.x they cannot reach.
+const PUBLIC_URL = (() => {
+  const raw = (process.env.PUBLIC_URL || '').trim().replace(/\/+$/, '');
+  if (!raw) return '';
+  if (!/^https?:\/\//i.test(raw)) {
+    console.warn(`⚠️  Ignoring PUBLIC_URL="${raw}" — it must start with http:// or https://`);
+    return '';
+  }
+  return raw;
+})();
 const SCOPES = [
   'streaming',
   'user-read-email',
@@ -129,8 +144,11 @@ function makeCode() {
   return code;
 }
 
+function baseUrl() {
+  return PUBLIC_URL || `http://${lanAddress()}:${PORT}`;
+}
 function joinUrl(code) {
-  return `http://${lanAddress()}:${PORT}/?join=${code}`;
+  return `${baseUrl()}/?join=${code}`;
 }
 
 // --- state -----------------------------------------------------------------
@@ -628,7 +646,8 @@ setInterval(() => {
 server.listen(PORT, '0.0.0.0', () => {
   const lan = lanAddress();
   console.log('\n🎵  Hitbeat is live!');
-  console.log(`   Everyone opens:  http://${lan}:${PORT}`);
+  console.log(`   Everyone opens:  ${baseUrl()}`);
+  if (PUBLIC_URL) console.log(`   On the LAN too:   http://${lan}:${PORT}`);
   console.log('   The first device to tap "Start a new game" becomes the board and shows');
   console.log('   the code for everyone else to scan. No screen needed on this machine.');
   console.log(`   Also on this machine, if you want the board here:  http://127.0.0.1:${PORT}`);
