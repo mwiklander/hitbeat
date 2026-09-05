@@ -6,8 +6,8 @@
   "target": 8,
   "songs": [
     { "title": "Thank You (Falettinme Be Mice Elf Agin)", "artist": "Sly and the Family Stone", "year": 1970 },
-    { "title": "Superstition", "artist": "Stevie Wonder", "year": 1972 },
-    { "title": "Papa Was a Rollin' Stone", "artist": "The Temptations", "year": 1972 },
+    { "title": "Superstition", "artist": "Stevie Wonder", "year": 1972, "spotifyId": "4N0TP4Rmj6QQezWV88ARNJ" },
+    { "title": "Papa Was a Rollin' Stone", "artist": "The Temptations", "year": 1972, "spotifyId": "7MiLmLbwNoyf47xQ4TCVYp" },
     { "title": "Jungle Boogie", "artist": "Kool & the Gang", "year": 1973 },
     { "title": "Rock Your Baby", "artist": "George McCrae", "year": 1974 },
     { "title": "Rock the Boat", "artist": "The Hues Corporation", "year": 1974 },
