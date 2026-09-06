@@ -82,28 +82,7 @@ function themeFiles() {
     .filter((f) => !ONLY || ONLY.has(path.basename(f, '.json')))
     .sort();
 }
-function readTheme(f) { return JSON.parse(fs.readFileSync(path.join(THEME_DIR, f), 'utf8')); }
-
-// Re-serialise a theme keeping the existing house style: one song per line,
-// 2-space indent, keys in a fixed order. Anything else churns a 1787-line diff.
-function writeTheme(f, theme) {
-  const { songs, ...head } = theme;
-  const headLines = Object.entries(head).map(([k, v]) => `  ${JSON.stringify(k)}: ${JSON.stringify(v)}`);
-  const songLines = songs.map((s) => {
-    const parts = [
-      `"title": ${JSON.stringify(s.title)}`,
-      `"artist": ${JSON.stringify(s.artist)}`,
-      `"year": ${JSON.stringify(s.year)}`,
-    ];
-    if (s.spotifyId) parts.push(`"spotifyId": ${JSON.stringify(s.spotifyId)}`);
-    for (const [k, v] of Object.entries(s)) {
-      if (!['title', 'artist', 'year', 'spotifyId'].includes(k)) parts.push(`${JSON.stringify(k)}: ${JSON.stringify(v)}`);
-    }
-    return `    { ${parts.join(', ')} }`;
-  });
-  const out = '{\n' + headLines.join(',\n') + ',\n  "songs": [\n' + songLines.join(',\n') + '\n  ]\n}\n';
-  fs.writeFileSync(path.join(THEME_DIR, f), out);
-}
+const { readTheme, writeTheme } = require('./theme-file');
 
 // ---- Spotify client credentials -------------------------------------------
 let token = null;
@@ -374,6 +353,6 @@ async function main() {
   console.log(`   Audit anytime with:  node scripts/resolve-track-ids.js --report\n`);
 }
 
-module.exports = { readTheme, writeTheme, keyOf, norm, primaryArtist, pick };
+module.exports = { readTheme, writeTheme, keyOf, norm, primaryArtist, pick, variantPenalty };
 
 if (require.main === module) main().catch((e) => { console.error(e); process.exit(1); });

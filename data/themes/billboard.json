@@ -4,6 +4,7 @@
   "emoji": "🏆",
   "blurb": "Every US chart-topper since 1958 — dated by the year it hit No. 1",
   "target": 10,
+  "excludeFromMixed": true,
   "songs": [
     { "title": "It's All in the Game", "artist": "Tommy Edwards", "year": 1958 },
     { "title": "It's Only Make Believe", "artist": "Conway Twitty", "year": 1958 },

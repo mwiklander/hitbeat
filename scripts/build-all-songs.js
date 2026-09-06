@@ -10,9 +10,24 @@
 
 const fs = require('fs');
 const path = require('path');
+const { writeTheme } = require('./theme-file');
 
 const dir = path.join(__dirname, '..', 'data', 'themes');
-const files = fs.readdirSync(dir).filter((f) => f.endsWith('.json') && f !== 'mixed.json');
+// A theme may opt out of the merge with "excludeFromMixed": true. That exists
+// for themes using a different dating convention: "Billboard No. 1s" dates a
+// song by the year it topped the chart, which disagrees with the release-style
+// year used everywhere else for 54 songs. Merging both would leave "All Songs"
+// telling players two different years for the same record depending on which
+// theme happened to win the de-duplication.
+const files = fs.readdirSync(dir)
+  .filter((f) => f.endsWith('.json') && f !== 'mixed.json')
+  .filter((f) => {
+    try {
+      if (!JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')).excludeFromMixed) return true;
+      console.log(`Skipping ${f} — excludeFromMixed is set.`);
+      return false;
+    } catch { return true; }
+  });
 
 const seen = new Map(); // normalized "title|artist" -> song
 let totalBeforeDedup = 0;
@@ -46,7 +61,7 @@ const out = {
   songs,
 };
 
-fs.writeFileSync(path.join(dir, 'mixed.json'), JSON.stringify(out, null, 2) + '\n');
+writeTheme('mixed.json', out); // one song per line — see scripts/theme-file.js
 
 console.log('Merged', files.length, 'themes:', files.join(', '));
 console.log('Total songs before dedup:', totalBeforeDedup);
