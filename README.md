@@ -1,44 +1,67 @@
-# 🎵 Hitbeat — a LAN music-timeline party game
+# 🎵 Hitbeat — a music-timeline party game
 
-A phone-friendly, Hitster-style party game for one room. A mystery song plays
-from Spotify; the team in the hot seat guesses **where it fits on their
-timeline by year**. Guess right, keep the card. First team to **10 cards** wins.
+A phone-friendly, Hitster-style party game. A mystery song plays; the team in
+the hot seat guesses **where it fits on their timeline by year**. Guess right,
+keep the card. First team to **10 cards** wins.
 
-- **The "table"** — the machine running the server. Shows a QR code, plays the
-  music out loud, and displays every team's timeline. Gather around it.
+- **The "table"** — one device shows the QR code others scan, and displays every
+  team's timeline. Any device will do: a laptop, a TV, a spare tablet, or just
+  somebody's phone. Whoever taps **Start a new game** first becomes the table.
+- **The DJ** — one phone plays the songs, through whatever it is connected to.
+  Normally that is whoever is paired to the Bluetooth speaker.
 - **The players** — everyone else, on their phones. Scan the QR, pick a name +
   emoji, self-assemble into teams, and place cards on your turn.
 
-No accounts, no admin, no physical cards. Just a laptop with speakers and
-everyone's phones on the same Wi-Fi.
+No accounts, no admin, no physical cards, and **no Spotify setup at all** for
+the machine running the server — it needs no login, no credentials and no
+speakers, so it can sit in a cupboard.
 
 ---
 
-## 1. One-time Spotify setup (~3 minutes)
+## 1. How the music plays
 
-Playing full songs uses Spotify's Web Playback SDK, so the **table** needs to be
-logged into a **Spotify Premium** account, and you need a free "app" registered
-with Spotify to get a Client ID.
+Two modes, chosen in the table's lobby.
 
-1. Go to <https://developer.spotify.com/dashboard> and log in.
-2. Click **Create app**. Fill in:
-   - **App name:** `Hitbeat` (anything)
-   - **App description:** `home party game` (anything)
-   - **Redirect URI:** `http://127.0.0.1:8080/callback`
-     ⚠️ Must be exactly this — use `127.0.0.1`, **not** `localhost`. This is the
-     only `http` address Spotify still accepts.
-   - **Which API/SDKs are you planning to use?** tick **Web Playback SDK** and
-     **Web API**.
-3. Save. Open the app → **Settings** → copy the **Client ID**.
-4. In this folder, copy `.env.example` to `.env` and paste your Client ID:
+### 🎧 A player's phone (the DJ) — the default
+
+Each song comes with its Spotify track id baked into the theme files, so the
+DJ's phone just opens `spotify:track:<id>` and Spotify starts playing. The
+server never talks to Spotify.
+
+- **Nothing to register, nothing to configure.** No Client ID, no OAuth, no
+  API quota. Anyone can host a game.
+- The DJ needs the **Spotify app** installed and signed in — their own account.
+  Premium gives full songs; a free account works with ads and limits.
+- Audio follows that phone: Bluetooth speaker, car, headphones, whatever.
+- The DJ taps ▶ each round, then turns the phone face down. Spotify shows the
+  track, so the DJ sees what is playing — the same trade-off Hitster has when
+  you scan its cards with Spotify rather than its own app.
+
+If a link opens Spotify's **web player** instead of the app, use the
+**"Switch to browser links"** toggle on the DJ panel. iOS reaches the app
+reliably via the `spotify:` scheme; the `https://` form only works once that
+phone has opened Spotify from a link before.
+
+### 💻 This machine — optional
+
+The server's own browser becomes the Spotify player via the Web Playback SDK.
+Nobody ever sees a track, which is its one advantage — but it needs speakers
+attached, a **Premium** login, and a registered Spotify app:
+
+1. Go to <https://developer.spotify.com/dashboard>, **Create app**.
+   - **Redirect URI:** `http://127.0.0.1:8080/callback` — exactly this.
+     `127.0.0.1`, **not** `localhost`; loopback is the only plain `http`
+     address Spotify still accepts, which is why this mode only works in a
+     browser on the same machine as the server.
+   - Tick **Web Playback SDK** and **Web API**.
+2. Copy the **Client ID** from Settings, then:
 
    ```bash
    cp .env.example .env
-   # then edit .env and set:  SPOTIFY_CLIENT_ID=your_client_id_here
+   # set: SPOTIFY_CLIENT_ID=your_client_id_here
    ```
 
-No client secret is needed — Hitbeat uses the PKCE flow, which is safe to run in
-the browser.
+No client secret is needed here — this uses the PKCE flow.
 
 ---
 
@@ -49,36 +72,58 @@ npm install     # first time only
 npm start
 ```
 
-You'll see:
+```
+🎵  Hitbeat is live!
+   Everyone opens:  http://192.168.0.175:8080
+   The first device to tap "Start a new game" becomes the board and shows
+   the code for everyone else to scan. No screen needed on this machine.
+```
+
+Open that address on a phone, tap **Start a new game**, and that phone is the
+table — it shows the QR code and the board. Everyone else scans it. If the
+person holding it is also on the speaker, they can tap **This device is the DJ**
+and run the whole game from one phone.
+
+Prefer a big screen? Open the same address on a laptop or TV instead and start
+the game there.
+
+Everyone must be on the **same Wi-Fi** — unless you set `PUBLIC_URL`.
+
+### Playing from outside the house
+
+`PUBLIC_URL` decides what the QR code advertises. Leave it empty for a game in
+one room. Point it at a public address — a [Cloudflare
+tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/)
+is the tidy way, since it needs no forwarded ports — and remote players can
+join:
 
 ```
-Jukebox / table:  http://127.0.0.1:8080   ← open this on the machine with the speakers
-Players join at:  http://192.168.68.120:8080   ← or just scan the QR
+PUBLIC_URL=https://hitbeat.example.com
 ```
 
-- On the **table machine**, open **http://127.0.0.1:8080** and click
-  **Start the game table**. Click **Connect** next to the Spotify status to log
-  in (Premium account). The dot turns green when ready.
-- Everyone else **scans the QR** (or opens the LAN URL) on their phone.
-
-Everyone must be on the **same Wi-Fi**.
+Without it, remote players are handed a `192.168.x.x` address they cannot
+reach. Put an authentication layer in front if you do this; Hitbeat has no
+accounts and no login of its own.
 
 ---
-
 ## 3. How to play
 
-1. **Join & team up.** Players scan the QR, pick a name + emoji, then either
+1. **Pick a DJ.** Whoever's phone is on the speaker taps **🎧 I'm the DJ** —
+   or the table taps **This device is the DJ** if it's doing both jobs. The
+   role stays put for the whole game; nobody re-pairs Bluetooth mid-party.
+2. **Join & team up.** Players scan the QR, pick a name + emoji, then either
    **join a team** or **start a new one**. Teams can be any size, mixed however
    you like. Tap your team's name to rename it.
-2. **Start.** When at least one team has a player, the table's **Start game**
+3. **Start.** When at least one team has a player, the table's **Start game**
    button lights up. Each team is dealt one starting card (a revealed year).
-3. **A mystery song plays.** The team whose turn it is listens, then on their
+4. **A mystery song plays.** The DJ taps **▶ Play the song** and turns the
+   phone face down. The team whose turn it is listens, then on their
    phones taps a **slot** on their timeline — before, between, or after the
    years they already have.
-4. **Bonus round (optional).** While listening, they can also type the
+5. **Bonus round (optional).** While listening, they can also type the
    **song title** and/or **artist** into the two bonus fields — no pressure,
    leave them blank to skip. Then hit **Lock it in**.
-5. **Reveal.** The song's year, title and artist flip up on every screen. If
+6. **Reveal.** The song's year, title and artist flip up on every screen. If
    the year landed in the right spot, the card joins that team's timeline
    (kept sorted); wrong year guesses are discarded. Typos and near-misses
    count ("Bohemian Rapsody", missing "The", swapped word order, missing
@@ -87,7 +132,7 @@ Everyone must be on the **same Wi-Fi**.
    and the team saves a 🎫 bonus card** — nothing happens to it automatically.
    It sits in the team's inventory (shown as a 🎫 count) until they choose to
    spend it on one of the powers the table has switched on (see below).
-6. **Next team — or keep going.** By default one song = one turn, but the table
+7. **Next team — or keep going.** By default one song = one turn, but the table
    can raise "Songs per turn" (see **Game settings** below) so a team keeps
    playing while they're right. **First team to 10 correctly-placed cards wins.**
    At the end, a "🧠 Music Nerd Award" calls out whoever named the most songs.
@@ -173,8 +218,8 @@ can never trap you (no more restarting the server):
   team. No score change. Use it when the team is stumped or wasn't ready. The
   active team also has a "No idea? Get a new song" button on their own phone.
 - **⏭️ Skip team** — abandon the turn and move to the next team.
-- **⏸️ Pause / ▶️ Play** — pause or resume the music (shown when Spotify is
-  connected) if a track ever hangs.
+- **⏸️ Pause / ▶️ Play** — pause or resume the music. Only in "This machine"
+  mode: in DJ mode Spotify owns playback, so the DJ pauses in Spotify itself.
 - **↺ Lobby** — send everyone back to the lobby (timelines cleared, teams kept).
 - **🏁 End game** — stop now and show the final standings.
 
@@ -215,12 +260,48 @@ file in that folder and it appears automatically after a server restart:
 }
 ```
 
-- Songs only need **title / artist / year** — no track links to hunt down.
-  Hitbeat looks the track up on Spotify at play time by title + artist,
-  preferring the original artist and most popular version.
+- Songs need **title / artist / year**. For DJ mode they also need a
+  `spotifyId`, which you don't write by hand — run the resolver below and it
+  fills them in. "This machine" mode looks tracks up at play time instead, so
+  it works without ids.
 - The **year is the source of truth** for scoring, so keep it accurate.
 - `target` is how many cards win a game (default 10; use 6–8 for smaller pools).
 - Aim for ~25+ songs so a game doesn't run out. Restart the server after edits.
+
+#### Baking in the Spotify track ids
+
+DJ mode plays a song by its id, so a song without one **cannot** be played —
+those are dropped from the pool rather than dealt as a dead card. The server
+prints which themes are fully resolved at startup.
+
+```bash
+node scripts/resolve-track-ids.js --only=80s,90s   # one or more themes
+node scripts/resolve-track-ids.js                  # everything
+node scripts/resolve-track-ids.js --report         # audit, no API calls
+```
+
+This is a build step, not part of the running game — it needs
+`SPOTIFY_CLIENT_ID` **and** `SPOTIFY_CLIENT_SECRET` in `.env` (dashboard →
+your app → Settings → View client secret). It uses the Client Credentials
+flow, so it doesn't consume one of the five Development Mode user slots.
+
+Things worth knowing before a long run:
+
+- **The daily quota is roughly 700 calls**, shared across your whole developer
+  account. A full pass over ~1,800 songs therefore spans a few days. Progress
+  is cached in `data/track-ids.json`, so re-running resumes where it stopped,
+  and `--max-calls=N` keeps a run deliberately under the limit.
+- Work is **de-duplicated across themes**, so resolving every theme costs far
+  less than the sum of their song counts.
+- `--report` classifies what it found: songs with no match, and songs where
+  the match looks like a **different performance** (a live take, a karaoke
+  version, a re-recording). Those match title and artist perfectly and are
+  otherwise invisible, so they're worth a glance. Radio and mono edits are
+  *not* flagged — those are the single versions people recognise.
+- Fix a bad pick by pinning it in
+  [`data/track-id-overrides.json`](data/track-id-overrides.json): find the
+  right version in Spotify, Share → Copy Song Link, and paste it under
+  `"Title|Artist"`. Overrides always win and cost no quota.
 
 **🌐 All Songs** (`data/themes/mixed.json`) is special — it's auto-generated as
 the de-duplicated union of every other theme, so it always has the most
@@ -239,34 +320,65 @@ until you regenerate it.)
 
 ## 5. Troubleshooting
 
-- **"Spotify not configured"** — you haven't set `SPOTIFY_CLIENT_ID` in `.env`,
-  or you didn't restart the server after editing it.
+### DJ mode
+
+- **No music, and the table says "Nobody is the DJ"** — nobody claimed the
+  role. Someone taps **🎧 I'm the DJ** on their phone, or the table taps
+  **This device is the DJ**.
+- **The link opens Spotify's web player instead of the app** — use the
+  **"Switch to browser links"** toggle on the DJ panel to flip between the
+  `spotify:` scheme and the `https://` form. The scheme reaches the app
+  reliably on iOS; the https link only does so on a phone that has already
+  opened Spotify from a link at least once, and otherwise falls back to the
+  web player, which can't use the phone's Bluetooth output.
+- **"Open in Spotify?" prompt every time** — normal for the `spotify:` scheme,
+  and harmless. Accept it; iOS stops asking.
+- **Audio comes out of the phone, not the speaker** — that's the phone's own
+  output routing, nothing to do with the game. Check the speaker is awake and
+  still paired; a sleeping Bluetooth speaker is the usual culprit.
+- **A theme has fewer songs than expected** — songs without a baked
+  `spotifyId` can't be played in DJ mode, so they're left out of the pool. The
+  server prints which themes are fully resolved at startup; run
+  `node scripts/resolve-track-ids.js` to fill in more.
+
+### "This machine" mode
+
+- **"Spotify not configured"** — `SPOTIFY_CLIENT_ID` isn't set in `.env`, or
+  the server wasn't restarted after editing it.
 - **Token exchange fails / "INVALID_CLIENT: Invalid redirect URI"** — the
   redirect URI in your Spotify app settings must be *exactly*
   `http://127.0.0.1:8080/callback`.
-- **"This account is not Premium"** — full-song playback needs Premium. Log the
-  table into a Premium account.
-- **Stuck on "Starting player…" / "Spotify connected but the player isn't
-  active yet"** — most common in **Safari**, which only lets the player finish
-  starting after you interact with the page: **tap anywhere on the table
-  screen once** after connecting and it should go green. (If it still won't:
-  confirm the account is Premium and isn't playing on another device, or open
-  the table in Google Chrome.) There's a **🔎 Spotify player log** under the
-  status line that shows exactly where startup stopped if you need to dig in.
-- **Song won't play** — make sure the Spotify status dot is green on the table
-  before starting, and that no other device is grabbing that Spotify account's
-  playback. Use the **🔊 Replay** button to re-trigger.
-- **Phones can't reach the game** — confirm they're on the same Wi-Fi and your
-  firewall allows connections to port 8080.
-- **Different port?** Set `PORT` in `.env` and update the redirect URI (both in
-  `.env` and in the Spotify dashboard) to match.
+- **"This account is not Premium"** — full-song playback needs Premium.
+- **Stuck on "Starting player…"** — most common in **Safari**, which only lets
+  the player finish starting after you interact with the page: **tap anywhere
+  on the table screen once** after connecting. (If it still won't: confirm the
+  account is Premium and isn't playing on another device, or use Chrome.)
+  There's a **🔎 Spotify player log** under the status line showing exactly
+  where startup stopped.
+- **The table must run on the same machine as the server** — Spotify only
+  allows plain `http` callbacks on loopback, so this mode can't be driven from
+  another device over the LAN. DJ mode has no such limit.
+
+### Anything else
+
+- **Phones can't reach the game** — same Wi-Fi, and the firewall must allow
+  port 8080. On macOS, allow incoming connections the first time you're asked.
+- **Remote players get an unreachable address** — set `PUBLIC_URL` (see
+  above); without it the QR encodes a LAN address.
+- **Different port?** Set `PORT` in `.env`. If you use "This machine" mode,
+  update the redirect URI in both `.env` and the Spotify dashboard to match.
 
 ### Songs that won't play
 
-Every so often a song can't be found on Spotify, or Spotify refuses to play
-it (regional restriction, catalog gap, etc.). When that happens the table
+This applies to **"This machine"** mode, where tracks are looked up at play
+time. Every so often a song can't be found on Spotify, or Spotify refuses to
+play it (regional restriction, catalog gap, etc.). When that happens the table
 **automatically records it and skips straight to a new song** for the same
 team — you shouldn't need to do anything mid-game.
+
+In DJ mode this mostly can't happen: ids are resolved ahead of time, and a
+song without one is left out of the pool before the game starts rather than
+failing mid-turn.
 
 Behind the scenes it's logged to [`data/broken-songs.json`](data/broken-songs.json)
 (also viewable at `/broken-songs` on the server) with a reason, how many
