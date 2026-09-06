@@ -48699,5 +48699,1402 @@
         "pop": 0
       }
     ]
+  },
+  "adore you|harry styles": {
+    "spotifyId": "3jjujdWJ72nww5eGnfs2E7",
+    "matchedTitle": "Adore You",
+    "matchedArtist": "Harry Styles",
+    "matchedYear": 2019,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "3jjujdWJ72nww5eGnfs2E7",
+        "name": "Adore You",
+        "artists": "Harry Styles",
+        "year": 2019,
+        "pop": 0
+      }
+    ]
+  },
+  "everything i wanted|billie eilish": {
+    "spotifyId": "3ZCTVFBt2Brf31RLEnCkWJ",
+    "matchedTitle": "everything i wanted",
+    "matchedArtist": "Billie Eilish",
+    "matchedYear": 2019,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "3ZCTVFBt2Brf31RLEnCkWJ",
+        "name": "everything i wanted",
+        "artists": "Billie Eilish",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "3KthlTDQ3y0dHaQWK7RR3S",
+        "name": "everything i wanted",
+        "artists": "Billie Eilish",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "6mLXxl4HgAv19zVO5OqmrI",
+        "name": "everything i wanted",
+        "artists": "Billie Eilish",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "0xNGazQ64AWZchYiLC8veF",
+        "name": "everything i wanted",
+        "artists": "Billie Eilish",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "0HkOSFd3CWu5d1TE2eiUBt",
+        "name": "everything i wanted",
+        "artists": "Billie Eilish",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "3Syv7KAb0aYUaanltiF9Nl",
+        "name": "everything i wanted",
+        "artists": "Billie Eilish",
+        "year": 2023,
+        "pop": 0
+      },
+      {
+        "id": "6ddoJiREib1BYRjEObejcV",
+        "name": "everything i wanted",
+        "artists": "Billie Eilish",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "07JrWCiaf48ihRA1j5QPIL",
+        "name": "everything i wanted",
+        "artists": "Billie Eilish",
+        "year": 2021,
+        "pop": 0
+      }
+    ]
+  },
+  "i hope|gabby barrett": {
+    "spotifyId": "23T0OX7QOiIUFShSzbJ5Uo",
+    "matchedTitle": "I Hope",
+    "matchedArtist": "Gabby Barrett",
+    "matchedYear": 2020,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "23T0OX7QOiIUFShSzbJ5Uo",
+        "name": "I Hope",
+        "artists": "Gabby Barrett",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "5cYFwgA5dHoqR3xGnlr9ew",
+        "name": "I Hope (feat. Charlie Puth)",
+        "artists": "Gabby Barrett, Charlie Puth",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "4uFpezzlBOYwN9YZ8i8WTV",
+        "name": "I Hope",
+        "artists": "Gabby Barrett",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "1iR2gvtAfsZHLCq9MhpGua",
+        "name": "I Hope",
+        "artists": "Gabby Barrett",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "2jIuJZvhZhuX4uoQikOg1U",
+        "name": "I Hope - Downtown Session",
+        "artists": "Gabby Barrett",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "0TCJZMsZJJPrHLk9gJQLGQ",
+        "name": "I Hope",
+        "artists": "Gabby Barrett",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "7ySPksJKRpoLlIaE31Yijc",
+        "name": "I Hope - feat. Charlie Puth",
+        "artists": "Gabby Barrett, Charlie Puth",
+        "year": 2020,
+        "pop": 0
+      }
+    ]
+  },
+  "intentions|justin bieber": {
+    "spotifyId": "4umIPjkehX1r7uhmGvXiSV",
+    "matchedTitle": "Intentions (feat. Quavo)",
+    "matchedArtist": "Justin Bieber, Quavo",
+    "matchedYear": 2020,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "4umIPjkehX1r7uhmGvXiSV",
+        "name": "Intentions (feat. Quavo)",
+        "artists": "Justin Bieber, Quavo",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "6VkmdRz8YgHFQV3ZNTJAWU",
+        "name": "Intentions - Acoustic",
+        "artists": "Justin Bieber",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "2UNaw8cIOTeTNmbnCIbLWi",
+        "name": "Intentions - Acoustic",
+        "artists": "Justin Bieber",
+        "year": 2023,
+        "pop": 0
+      },
+      {
+        "id": "1KQxRQv8JGXMOz7u2NEmY5",
+        "name": "Intentions",
+        "artists": "Justin Bieber, Quavo",
+        "year": 2023,
+        "pop": 0
+      },
+      {
+        "id": "3YSYrCSpNBL4BKJuHnD0Ml",
+        "name": "Intentions - Acoustic",
+        "artists": "Justin Bieber",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "328HPNDuzb9DYCz7uPt8td",
+        "name": "Intentions - Acoustic",
+        "artists": "Justin Bieber",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "2Hkuaknwhole6gI3iSEWJv",
+        "name": "Intentions - Acoustic",
+        "artists": "Justin Bieber",
+        "year": 2022,
+        "pop": 0
+      },
+      {
+        "id": "4CupCtL1GokptrNp5OVF1E",
+        "name": "Intentions - Acoustic",
+        "artists": "Justin Bieber",
+        "year": 2023,
+        "pop": 0
+      },
+      {
+        "id": "0UzaLlfC40lK4QPPMMLKkh",
+        "name": "Intentions",
+        "artists": "Justin Bieber, Quavo",
+        "year": 2021,
+        "pop": 0
+      }
+    ]
+  },
+  "life is good|future": {
+    "spotifyId": "5yY9lUy8nbvjM1Uyo1Uqoc",
+    "matchedTitle": "Life Is Good (feat. Drake)",
+    "matchedArtist": "Future, Drake",
+    "matchedYear": 2020,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "5yY9lUy8nbvjM1Uyo1Uqoc",
+        "name": "Life Is Good (feat. Drake)",
+        "artists": "Future, Drake",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "1K5KBOgreBi5fkEHvg5ap3",
+        "name": "Life Is Good (feat. Drake)",
+        "artists": "Future, Drake",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "4Qd0pa3JO76UEwhos9JmN0",
+        "name": "Life Is Good (feat. Drake, DaBaby & Lil Baby) - Remix",
+        "artists": "Future, Drake, DaBaby, Lil Baby",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "2TVwfFUiTNEeVmmKmRnt1l",
+        "name": "Life Is What You Give It",
+        "artists": "Tunes of the Future",
+        "year": 2024,
+        "pop": 0
+      },
+      {
+        "id": "4lXiZqkoqmk2NkNWJxuBSI",
+        "name": "Life Is Good (feat. Drake)",
+        "artists": "Future, Drake",
+        "year": 2024,
+        "pop": 0
+      },
+      {
+        "id": "32kG1RB4surQA53LOtelNz",
+        "name": "LIFE IS GOOD",
+        "artists": "Crazy Stars Future",
+        "year": 2026,
+        "pop": 0
+      },
+      {
+        "id": "59NP1VlbSgxr2sFhqJ1O4g",
+        "name": "Life Is Good",
+        "artists": "Future Pop",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "5f7xYMztVU58w95unjigQl",
+        "name": "Life is Good",
+        "artists": "Future Mercy",
+        "year": 2026,
+        "pop": 0
+      },
+      {
+        "id": "3tnUjp9H6iF4Nx2dwy1qyP",
+        "name": "Good Life",
+        "artists": "Future Historians",
+        "year": 2012,
+        "pop": 0
+      }
+    ]
+  },
+  "rockstar|dababy": {
+    "spotifyId": "7ytR5pFWmSjzHJIeQkgog4",
+    "matchedTitle": "ROCKSTAR (feat. Roddy Ricch)",
+    "matchedArtist": "DaBaby, Roddy Ricch",
+    "matchedYear": 2020,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "7ytR5pFWmSjzHJIeQkgog4",
+        "name": "ROCKSTAR (feat. Roddy Ricch)",
+        "artists": "DaBaby, Roddy Ricch",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "4Aykm3xrOFSHrAnv80KUhh",
+        "name": "ROCKSTAR (feat. Roddy Ricch) - BLM REMIX",
+        "artists": "DaBaby, Roddy Ricch",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "3GBWERDFODMjX1ysTXLnmS",
+        "name": "ROCKSTAR (feat. Roddy Ricch) - BLM REMIX",
+        "artists": "DaBaby, Roddy Ricch",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "30UFKKWSOC2Xr6KfWcyvsI",
+        "name": "ROCKSTAR (feat. Roddy Ricch)",
+        "artists": "DaBaby, Roddy Ricch",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "37pXjFZuAYs6HgWaEbKokc",
+        "name": "ROCKSTAR (feat. Roddy Ricch)",
+        "artists": "DaBaby, Roddy Ricch",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "6S7nlWAa5K3KoPfAWc85hc",
+        "name": "ROCKSTAR (feat. Roddy Ricch) - BLM REMIX",
+        "artists": "DaBaby, Roddy Ricch",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "01F6rZ2WWK97j5O5xoMNIf",
+        "name": "ROCKSTAR",
+        "artists": "DaBaby, Roddy Ricch",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "0L8qIAq84sX93nwb6QrU0I",
+        "name": "ROCKSTAR (feat. Roddy Ricch) - BLM REMIX",
+        "artists": "DaBaby, Roddy Ricch",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "2hCF4BnLARMm1HVa9LQpiD",
+        "name": "ROCKSTAR",
+        "artists": "DaBaby, Roddy Ricch",
+        "year": 2020,
+        "pop": 0
+      }
+    ]
+  },
+  "roses|saint jhn": {
+    "spotifyId": "47MhyGA0XUtF9lZJtny3Pd",
+    "matchedTitle": "Roses",
+    "matchedArtist": "SAINt JHN",
+    "matchedYear": 2018,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "24Yi9hE78yPEbZ4kxyoXAI",
+        "name": "Roses - Imanbek Remix",
+        "artists": "SAINt JHN, Imanbek",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "47MhyGA0XUtF9lZJtny3Pd",
+        "name": "Roses",
+        "artists": "SAINt JHN",
+        "year": 2018,
+        "pop": 0
+      },
+      {
+        "id": "40cFdmLD8PO7wOvYHG4qYe",
+        "name": "Roses [Feat. Future]",
+        "artists": "SAINt JHN, Future",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "2zJ2jLVDrl1tfMZkR89j4k",
+        "name": "Roses - Imanbek Remix [Latino Gang]",
+        "artists": "SAINt JHN, J Balvin, Imanbek",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "1XjBqBftdX0Q9g58WtmmUX",
+        "name": "Roses - Imanbek Remix",
+        "artists": "SAINt JHN, Imanbek",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "704rwEynqs08QLGukX0hzm",
+        "name": "Roses",
+        "artists": "SAINt JHN",
+        "year": 2018,
+        "pop": 0
+      },
+      {
+        "id": "7kBnHHUFlsSiNHSSP808PT",
+        "name": "Roses [Feat. Future]",
+        "artists": "SAINt JHN, Future",
+        "year": 2020,
+        "pop": 0
+      }
+    ]
+  },
+  "roxanne|arizona zervas": {
+    "spotifyId": "696DnlkuDOXcMAnKlTgXXK",
+    "matchedTitle": "ROXANNE",
+    "matchedArtist": "Arizona Zervas",
+    "matchedYear": 2019,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "696DnlkuDOXcMAnKlTgXXK",
+        "name": "ROXANNE",
+        "artists": "Arizona Zervas",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "5xyTxLbw34gXUQck6xVazT",
+        "name": "ROXANNE",
+        "artists": "Arizona Zervas",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "5hC7h0yWVMkxhLbNXCscBR",
+        "name": "ROXANNE - Remix",
+        "artists": "Arizona Zervas, Swae Lee",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "74EYcxwy8szTu8dspl8XWW",
+        "name": "ROXANNE",
+        "artists": "Arizona Zervas",
+        "year": 2022,
+        "pop": 0
+      },
+      {
+        "id": "28CiaScyRj6CY6CdDSKcJH",
+        "name": "ROXANNE",
+        "artists": "Arizona Zervas",
+        "year": 2022,
+        "pop": 0
+      },
+      {
+        "id": "4XIh2O6VK0UiJBLlJgTsbH",
+        "name": "ROXANNE",
+        "artists": "Arizona Zervas",
+        "year": 2022,
+        "pop": 0
+      },
+      {
+        "id": "4BdMWhWqSalDM9FC9EBha5",
+        "name": "ROXANNE",
+        "artists": "Arizona Zervas",
+        "year": 2022,
+        "pop": 0
+      },
+      {
+        "id": "0158mAm1Yp6tTj9xIcTmSc",
+        "name": "ROXANNE",
+        "artists": "Arizona Zervas",
+        "year": 2022,
+        "pop": 0
+      },
+      {
+        "id": "6HY8tNne7puvPBpsZAZT1G",
+        "name": "ROXANNE",
+        "artists": "Arizona Zervas",
+        "year": 2022,
+        "pop": 0
+      }
+    ]
+  },
+  "savage|megan thee stallion": {
+    "spotifyId": "55CHeLEfn5iJ0IIkgaa4si",
+    "matchedTitle": "Savage",
+    "matchedArtist": "Megan Thee Stallion",
+    "matchedYear": 2020,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "55CHeLEfn5iJ0IIkgaa4si",
+        "name": "Savage",
+        "artists": "Megan Thee Stallion",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "5v4GgrXPMghOnBBLmveLac",
+        "name": "Savage Remix (feat. Beyoncé)",
+        "artists": "Megan Thee Stallion, Beyoncé",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "6Nth4LOPIqBNe7OKzXWeoK",
+        "name": "Savage",
+        "artists": "Megan Thee Stallion",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "2Z71PZlOeF9YVze4hy1A1a",
+        "name": "Savage Remix (feat. Beyoncé)",
+        "artists": "Megan Thee Stallion, Beyoncé",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "6QhABlOZKHWqt2LBa8WbXw",
+        "name": "Savage - Major Lazer Remix",
+        "artists": "Megan Thee Stallion, Major Lazer",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "5cHpzOCrgpnjKuoFqOUIdw",
+        "name": "Savage Remix (feat. Beyoncé)",
+        "artists": "Megan Thee Stallion, Beyoncé",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "1XayIbrJnnOCork8ORKoMK",
+        "name": "Savage - Major Lazer Remix",
+        "artists": "Megan Thee Stallion, Major Lazer",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "0BMqb67dBQU9lRnxKi7Nfy",
+        "name": "Savage (Chopnotslop Remix)",
+        "artists": "Megan Thee Stallion, OG Ron C",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "3d7AaPg2ABBfZzuJm4Hqav",
+        "name": "Savage",
+        "artists": "Megan Thee Stallion",
+        "year": 2022,
+        "pop": 0
+      }
+    ]
+  },
+  "say so|doja cat": {
+    "spotifyId": "3Dv1eDb0MEgF93GpLXlucZ",
+    "matchedTitle": "Say So",
+    "matchedArtist": "Doja Cat",
+    "matchedYear": 2019,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "3Dv1eDb0MEgF93GpLXlucZ",
+        "name": "Say So",
+        "artists": "Doja Cat",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "11VApNQCWLJdzxWrlmwzUa",
+        "name": "Say So (feat. Nicki Minaj)",
+        "artists": "Doja Cat, Nicki Minaj",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "0FsKQ04gn6CHHOq2ISEm0H",
+        "name": "Say So",
+        "artists": "Doja Cat",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "1KNh3GCalI00xnSGQZNmiZ",
+        "name": "Say So (feat. Nicki Minaj) - Original Version",
+        "artists": "Doja Cat, Nicki Minaj",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "1taiFk3Go0bQ1Wb5dhWAI3",
+        "name": "Say So (feat. Nicki Minaj) - Original Version",
+        "artists": "Doja Cat, Nicki Minaj",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "7qrO2oI0A9DW6wQPjSADxx",
+        "name": "Say So (Jax Jones Midnight Snack Remix)",
+        "artists": "Doja Cat, Jax Jones",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "4jBktGfTrKpGkPHV3PLaA0",
+        "name": "Say So / Like That (Mashup)",
+        "artists": "Doja Cat",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "0YiILuIBfDyYTUmd9uLwcd",
+        "name": "Say So - Snakehips Remix",
+        "artists": "Doja Cat, Snakehips",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "0KlHQ37uPhdCMooGuS6S7o",
+        "name": "Say So",
+        "artists": "Doja Cat",
+        "year": 2022,
+        "pop": 0
+      }
+    ]
+  },
+  "the bones|maren morris": {
+    "spotifyId": "7yFhA2fUsL2oIMWlw5DaHQ",
+    "matchedTitle": "The Bones",
+    "matchedArtist": "Maren Morris",
+    "matchedYear": 2019,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "7yFhA2fUsL2oIMWlw5DaHQ",
+        "name": "The Bones",
+        "artists": "Maren Morris",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "1HpdzrVDURsrF7Mr4aykuQ",
+        "name": "The Bones",
+        "artists": "Kayla Maren, Alexa J Morris",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "3LJWl9hMaxvRU3TosbK1wh",
+        "name": "The Bones - Dave Audé Remix",
+        "artists": "Maren Morris, Dave Audé",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "1yTTMcUhL7rtz08Dsgb7Qb",
+        "name": "The Bones - with Hozier",
+        "artists": "Maren Morris, Hozier",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "0qSR7aeJONS1yapONTKerm",
+        "name": "The Bones - Acoustic",
+        "artists": "Maren Morris",
+        "year": 2020,
+        "pop": 0
+      }
+    ]
+  },
+  "the box|roddy ricch": {
+    "spotifyId": "0nbXyq5TXYPCO7pr3N8S4I",
+    "matchedTitle": "The Box",
+    "matchedArtist": "Roddy Ricch",
+    "matchedYear": 2019,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "0nbXyq5TXYPCO7pr3N8S4I",
+        "name": "The Box",
+        "artists": "Roddy Ricch",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "00ek0QrNbzlmMMrGeqTHTM",
+        "name": "The Box",
+        "artists": "Roddy Ricch",
+        "year": 2024,
+        "pop": 0
+      },
+      {
+        "id": "4p3HXubEib6ZjyL3VIwlVp",
+        "name": "The Box",
+        "artists": "Roddy Ricch",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "3P9bEWvIESZlqVj9DXKGR6",
+        "name": "The Box",
+        "artists": "Roddy Ricch",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "39c7nbUyVYjEYZhFPTVgzP",
+        "name": "The Box",
+        "artists": "Roddy Ricch",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "6Xp06qrRbjZlgNS1NUTN74",
+        "name": "The Box",
+        "artists": "Roddy Ricch",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "4GhoTA27J3GUGFsE7CHdqd",
+        "name": "The Box",
+        "artists": "Roddy Ricch",
+        "year": 2022,
+        "pop": 0
+      },
+      {
+        "id": "5hEr4llFgAkrDlIZ0vmPcY",
+        "name": "The Box",
+        "artists": "Roddy Ricch",
+        "year": 2025,
+        "pop": 0
+      }
+    ]
+  },
+  "watermelon sugar|harry styles": {
+    "spotifyId": "6UelLqGlWMcVH1E5c4H7lY",
+    "matchedTitle": "Watermelon Sugar",
+    "matchedArtist": "Harry Styles",
+    "matchedYear": 2019,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "6UelLqGlWMcVH1E5c4H7lY",
+        "name": "Watermelon Sugar",
+        "artists": "Harry Styles",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "2pnhjTNbY0wBk6umNxeT0r",
+        "name": "Watermelon Sugar",
+        "artists": "Sidney Styles, Juliet Harry",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "1pjBTm2AlOrezNxvXl7lVD",
+        "name": "Watermelon sugar (Originally performed by Harry Styles)",
+        "artists": "The Harry Styles Cover Band",
+        "year": 2023,
+        "pop": 0
+      }
+    ]
+  },
+  "whats poppin|jack harlow": {
+    "spotifyId": "1jaTQ3nqY3oAAYyCTbIvnM",
+    "matchedTitle": "WHATS POPPIN",
+    "matchedArtist": "Jack Harlow",
+    "matchedYear": 2020,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "1jaTQ3nqY3oAAYyCTbIvnM",
+        "name": "WHATS POPPIN",
+        "artists": "Jack Harlow",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "2MbdDtCv5LUVjYy9RuGTgC",
+        "name": "WHATS POPPIN (feat. DaBaby, Tory Lanez & Lil Wayne) - Remix",
+        "artists": "Jack Harlow, Tory Lanez, DaBaby, Lil Wayne",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "0ZLuW8uOXdFNWcI40C0OC2",
+        "name": "Whats Poppin (feat. DaBaby, Tory Lanez & Lil Wayne) [Remix] - Bonus Track",
+        "artists": "Jack Harlow, Tory Lanez, DaBaby, Lil Wayne",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "6MmqHc3V7NlOyPmHPVfHLo",
+        "name": "Whats Poppin",
+        "artists": "Jack Harlow",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "00Q2cUf4YdLYDWEZHAnShH",
+        "name": "WHATS POPPIN",
+        "artists": "Jack Harlow",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "6EK6MRqtfGPjBXHHQGiVjQ",
+        "name": "WHATS POPPIN",
+        "artists": "Jack Harlow",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "1EhJ3rFZE9hAc2vu9Z2hgL",
+        "name": "Whats Poppin (feat. DaBaby, Tory Lanez & Lil Wayne) [Remix] - Bonus Track",
+        "artists": "Jack Harlow, Tory Lanez, DaBaby, Lil Wayne",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "3sk7ljZfeymwYIwn3H7cP9",
+        "name": "WHATS POPPIN - Remix",
+        "artists": "Jack Harlow, DaBaby, Tory Lanez, Lil Wayne",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "40Lbp3DlCk8ZJdGj7Otqrs",
+        "name": "WHATS POPPIN",
+        "artists": "Jack Harlow",
+        "year": 2020,
+        "pop": 0
+      }
+    ]
+  },
+  "astronaut in the ocean|masked wolf": {
+    "spotifyId": "3Ofmpyhv5UAQ70mENzB277",
+    "matchedTitle": "Astronaut In The Ocean",
+    "matchedArtist": "Masked Wolf",
+    "matchedYear": 2021,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "3Ofmpyhv5UAQ70mENzB277",
+        "name": "Astronaut In The Ocean",
+        "artists": "Masked Wolf",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "6E90gq0KO6FYZVOXx8kCcC",
+        "name": "Astronaut In The Ocean",
+        "artists": "Masked Wolf",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "1yX6sh2TkrT5hsXodo7aS6",
+        "name": "Astronaut In The Ocean - Alok Remix",
+        "artists": "Masked Wolf, Alok",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "0BGwAKW4u8kWOhWFflZxfl",
+        "name": "Astronaut In The Ocean",
+        "artists": "Masked Wolf",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "73UCznfjLY2lH8sIi9AtiJ",
+        "name": "Astronaut In The Ocean - TCTS Remix",
+        "artists": "Masked Wolf, TCTS",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "6obwWXkBEYouAdP0BGthKt",
+        "name": "Astronaut In The Ocean",
+        "artists": "Masked Wolf",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "1NawUUW8GmiRbJ9UkaKGY4",
+        "name": "Astronaut In The Ocean (Remix) - feat. G-Eazy & DDG",
+        "artists": "Masked Wolf, DDG, G-Eazy",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "5xSHLDWdeIEpBa84mQRoJX",
+        "name": "Astronaut In The Ocean - The Synaptik & Freek Remix",
+        "artists": "Masked Wolf, The Synaptik, Freek",
+        "year": 2019,
+        "pop": 0
+      },
+      {
+        "id": "006Uz9mreZLUbKF9gJ3SeZ",
+        "name": "Astronaut in the Ocean",
+        "artists": "Masked Wolf",
+        "year": 2025,
+        "pop": 0
+      }
+    ]
+  },
+  "bad habits|ed sheeran": {
+    "spotifyId": "3rmo8F54jFF8OgYsqTxm5d",
+    "matchedTitle": "Bad Habits",
+    "matchedArtist": "Ed Sheeran",
+    "matchedYear": 2021,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "3rmo8F54jFF8OgYsqTxm5d",
+        "name": "Bad Habits",
+        "artists": "Ed Sheeran",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "6D2cTvk73bKZZlwvN488vI",
+        "name": "Bad Habits - MEDUZA Remix",
+        "artists": "Ed Sheeran, MEDUZA",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "7vrKEP66NdiQDPryPG6olO",
+        "name": "Bad Habits (feat. Bring Me The Horizon)",
+        "artists": "Ed Sheeran, Bring Me The Horizon",
+        "year": 2022,
+        "pop": 0
+      },
+      {
+        "id": "0KWQ38sIjAITdK4lTwZs2E",
+        "name": "Bad Habits (feat. Tion Wayne & Central Cee) [Fumez The Engineer Remix]",
+        "artists": "Ed Sheeran, Tion Wayne, Central Cee, Fumez The Engineer",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "4NiFGz1kOugudhHecPvsi5",
+        "name": "Bad Habits (feat. Bring Me The Horizon)",
+        "artists": "Ed Sheeran, Bring Me The Horizon",
+        "year": 2022,
+        "pop": 0
+      },
+      {
+        "id": "1qf3VwNg9h0lFHIehOWiA6",
+        "name": "Bad Habits - Acoustic Version",
+        "artists": "Ed Sheeran",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "1pHXwNYdq3ZBxAL5c3xKQ5",
+        "name": "Bad Habits - Joel Corry Remix",
+        "artists": "Ed Sheeran, Joel Corry",
+        "year": 2021,
+        "pop": 0
+      }
+    ]
+  },
+  "butter|bts": {
+    "spotifyId": "1mWdTewIgB3gtBM3TOSFhB",
+    "matchedTitle": "Butter",
+    "matchedArtist": "BTS",
+    "matchedYear": 2021,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "1mWdTewIgB3gtBM3TOSFhB",
+        "name": "Butter",
+        "artists": "BTS",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "3bjg5cbmuwDoS7e2dAWyRG",
+        "name": "Butterfly",
+        "artists": "BTS",
+        "year": 2015,
+        "pop": 0
+      },
+      {
+        "id": "6jjYDGxVJsWS0a5wlVF5vS",
+        "name": "Butter",
+        "artists": "BTS",
+        "year": 2022,
+        "pop": 0
+      },
+      {
+        "id": "474VqnPDr0251lsQBB8sQB",
+        "name": "Butter - Megan Thee Stallion Remix",
+        "artists": "BTS, Megan Thee Stallion",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "0XwvxY5yMRI7vh55eBRe3B",
+        "name": "Butterfly (Prologue Mix)",
+        "artists": "BTS",
+        "year": 2016,
+        "pop": 0
+      },
+      {
+        "id": "2QP1vvLPtAVOVAFabpqypA",
+        "name": "Butterfly",
+        "artists": "BTS",
+        "year": 2016,
+        "pop": 0
+      },
+      {
+        "id": "1Xzqryxsf3vIRazdffKEOL",
+        "name": "Butter - Live",
+        "artists": "BTS",
+        "year": 2025,
+        "pop": 0
+      },
+      {
+        "id": "0G0UoEFLum7ZPJxbmMbhPf",
+        "name": "Butterfly (Alternative Mix)",
+        "artists": "BTS",
+        "year": 2016,
+        "pop": 0
+      }
+    ]
+  },
+  "deja vu|olivia rodrigo": {
+    "spotifyId": "6HU7h9RYOaPRFeh0R3UeAr",
+    "matchedTitle": "deja vu",
+    "matchedArtist": "Olivia Rodrigo",
+    "matchedYear": 2021,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "6HU7h9RYOaPRFeh0R3UeAr",
+        "name": "deja vu",
+        "artists": "Olivia Rodrigo",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "3ucQ4DLpH8RgyzqYBMnDpj",
+        "name": "deja vu",
+        "artists": "Olivia Rodrigo",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "0GqT5g9RSvYIscw0wo89YU",
+        "name": "deja vu",
+        "artists": "Olivia Rodrigo",
+        "year": 2026,
+        "pop": 0
+      },
+      {
+        "id": "33xz9SybA4clonSSyLSvxV",
+        "name": "deja vu",
+        "artists": "Olivia Rodrigo",
+        "year": 2024,
+        "pop": 0
+      },
+      {
+        "id": "5BEXiRtw8qDO0Sbu0o6oZF",
+        "name": "deja vu",
+        "artists": "Olivia Rodrigo",
+        "year": 2022,
+        "pop": 0
+      },
+      {
+        "id": "5o4Q6r3ghAteEMEux3RD6d",
+        "name": "deja vu",
+        "artists": "Olivia Rodrigo",
+        "year": 2023,
+        "pop": 0
+      },
+      {
+        "id": "3428Xggc4TzApXGK2TnIcy",
+        "name": "deja vu",
+        "artists": "Olivia Rodrigo",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "1Wbjyt4KwhZAjN0MykDuoZ",
+        "name": "deja vu",
+        "artists": "Olivia Rodrigo",
+        "year": 2023,
+        "pop": 0
+      },
+      {
+        "id": "1YeN45OOOsyshpUgxPa7Bh",
+        "name": "deja vu",
+        "artists": "Olivia Rodrigo",
+        "year": 2026,
+        "pop": 0
+      }
+    ]
+  },
+  "drivers license|olivia rodrigo": {
+    "spotifyId": "5wANPM4fQCJwkGd4rN57mH",
+    "matchedTitle": "drivers license",
+    "matchedArtist": "Olivia Rodrigo",
+    "matchedYear": 2021,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "5wANPM4fQCJwkGd4rN57mH",
+        "name": "drivers license",
+        "artists": "Olivia Rodrigo",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "7lPN2DXiMsVn7XUKtOW1CS",
+        "name": "drivers license",
+        "artists": "Olivia Rodrigo",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "4ml4WlnHDEpOK8HRVYTCWf",
+        "name": "drivers license",
+        "artists": "Olivia Rodrigo",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "7JjvawRgT9c8bTlSJPhabt",
+        "name": "drivers license",
+        "artists": "Olivia Rodrigo",
+        "year": 2026,
+        "pop": 0
+      },
+      {
+        "id": "00B1I4hYl6gtCVkSeAy8Zc",
+        "name": "drivers license",
+        "artists": "Olivia Rodrigo",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "7KUc7QzjDRTww8ZMsZakQY",
+        "name": "drivers license",
+        "artists": "Olivia Rodrigo",
+        "year": 2023,
+        "pop": 0
+      },
+      {
+        "id": "6uPQBahxhCMrKn6p6rycDg",
+        "name": "drivers license",
+        "artists": "Olivia Rodrigo",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "1m2w0S0zC5A8ktwBR1Brfg",
+        "name": "drivers license",
+        "artists": "Olivia Rodrigo",
+        "year": 2022,
+        "pop": 0
+      },
+      {
+        "id": "06kDH0htdZt01Z8haPWOpB",
+        "name": "drivers license",
+        "artists": "Olivia Rodrigo",
+        "year": 2021,
+        "pop": 0
+      }
+    ]
+  },
+  "forever after all|luke combs": {
+    "spotifyId": "6IBcOGPsniK3Pso1wHIhew",
+    "matchedTitle": "Forever After All",
+    "matchedArtist": "Luke Combs",
+    "matchedYear": 2020,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "6IBcOGPsniK3Pso1wHIhew",
+        "name": "Forever After All",
+        "artists": "Luke Combs",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "4DdUFOY2ums5dOOMBzoMYo",
+        "name": "Forever After All",
+        "artists": "Luke Combs",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "7dvi3EmndcDTzgNrhas2a4",
+        "name": "Forever After All",
+        "artists": "Blake Combs, Luke Mills",
+        "year": 2020,
+        "pop": 0
+      }
+    ]
+  },
+  "go crazy|chris brown": {
+    "spotifyId": "1IIKrJVP1C9N7iPtG6eOsK",
+    "matchedTitle": "Go Crazy",
+    "matchedArtist": "Chris Brown, Young Thug",
+    "matchedYear": 2020,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "1IIKrJVP1C9N7iPtG6eOsK",
+        "name": "Go Crazy",
+        "artists": "Chris Brown, Young Thug",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "2f9jZy5IAHbM0VwneQpad2",
+        "name": "Go Crazy (Remix) (feat. Young Thug, Future, Lil Durk & Latto)",
+        "artists": "Chris Brown, Future, Latto, Young Thug, Lil Durk",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "1Jz1yhcPm1Yt6aoed3zact",
+        "name": "Go Crazy (Remix) (feat. Young Thug, Future, Lil Durk & Latto)",
+        "artists": "Chris Brown, Future, Latto, Young Thug, Lil Durk",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "3D5yuaiidNV03EKKPBJDxF",
+        "name": "Go Crazy",
+        "artists": "Chris Brown, Young Thug",
+        "year": 2024,
+        "pop": 0
+      },
+      {
+        "id": "2cKJmkbLEg5zcar0QpioUw",
+        "name": "Go Crazy",
+        "artists": "Chris Brown, Young Thug",
+        "year": 2020,
+        "pop": 0
+      }
+    ]
+  },
+  "good 4 u|olivia rodrigo": {
+    "spotifyId": "4ZtFanR9U6ndgddUvNcjcG",
+    "matchedTitle": "good 4 u",
+    "matchedArtist": "Olivia Rodrigo",
+    "matchedYear": 2021,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "4ZtFanR9U6ndgddUvNcjcG",
+        "name": "good 4 u",
+        "artists": "Olivia Rodrigo",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "6P4d1NWBCNIYZjzF9k1mVN",
+        "name": "good 4 u",
+        "artists": "Olivia Rodrigo",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "09uZZxoqJgKdiZWI36Cinr",
+        "name": "good 4 u",
+        "artists": "Olivia Rodrigo",
+        "year": 2024,
+        "pop": 0
+      },
+      {
+        "id": "0lZjvI5LWKBfdy9FK4uIrb",
+        "name": "good 4 u",
+        "artists": "Olivia Rodrigo",
+        "year": 2022,
+        "pop": 0
+      },
+      {
+        "id": "0544ImgvSJ9BWM2hxb9MrH",
+        "name": "good 4 u",
+        "artists": "Olivia Rodrigo",
+        "year": 2024,
+        "pop": 0
+      },
+      {
+        "id": "00RcOnNnkcwt5V7MWmfaSz",
+        "name": "good 4 u",
+        "artists": "Olivia Rodrigo",
+        "year": 2025,
+        "pop": 0
+      },
+      {
+        "id": "2IFL6xSq2keb1LxuthyLyD",
+        "name": "good 4 u",
+        "artists": "Olivia Rodrigo",
+        "year": 2026,
+        "pop": 0
+      },
+      {
+        "id": "0o2taPmRKgMWYdjSyEXuJ9",
+        "name": "good 4 u",
+        "artists": "Olivia Rodrigo",
+        "year": 2026,
+        "pop": 0
+      },
+      {
+        "id": "6dqd3hNL0FcS02eRPnFbMF",
+        "name": "good 4 u",
+        "artists": "Olivia Rodrigo",
+        "year": 2023,
+        "pop": 0
+      }
+    ]
+  },
+  "heat waves|glass animals": {
+    "spotifyId": "3USxtqRwSYz57Ewm6wWRMp",
+    "matchedTitle": "Heat Waves",
+    "matchedArtist": "Glass Animals",
+    "matchedYear": 2020,
+    "score": 148,
+    "candidates": [
+      {
+        "id": "3USxtqRwSYz57Ewm6wWRMp",
+        "name": "Heat Waves",
+        "artists": "Glass Animals",
+        "year": 2020,
+        "pop": 0
+      },
+      {
+        "id": "3Che0Dm9dlytqujcprVAwE",
+        "name": "Heat Waves",
+        "artists": "Glass Animals, iann dior",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "1K2RnVhm3eauKnA8PAcPu1",
+        "name": "Heat Waves - Slowed",
+        "artists": "Glass Animals",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "00pDdIwejrPXzci9bpYtcY",
+        "name": "Heat Waves",
+        "artists": "Glass Animals",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "0eu1F780TqjCf2g6F33fDO",
+        "name": "Heat Waves",
+        "artists": "Glass Animals",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "6qXCxJYDFLBnlRwrHJd5gd",
+        "name": "Heat Waves - Diplo Remix",
+        "artists": "Glass Animals, Diplo",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "65xvfgI2nNrOYHhGUzw9XP",
+        "name": "Heat Waves - Oliver Heldens Remix",
+        "artists": "Glass Animals, Oliver Heldens",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "4yLtGWKbjiCKbmZkGA0z3m",
+        "name": "Heat Waves - Sonny Fodera Remix",
+        "artists": "Glass Animals, Sonny Fodera",
+        "year": 2021,
+        "pop": 0
+      },
+      {
+        "id": "07eSvyQdNtt5nPNNcBvDui",
+        "name": "Heat Waves - Stripped Back",
+        "artists": "Glass Animals",
+        "year": 2021,
+        "pop": 0
+      }
+    ]
   }
 }
