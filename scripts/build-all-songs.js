@@ -22,7 +22,16 @@ for (const f of files) {
   for (const s of t.songs) {
     totalBeforeDedup++;
     const key = (s.title + '|' + s.artist).toLowerCase().trim().replace(/\s+/g, ' ');
-    if (!seen.has(key)) seen.set(key, { title: s.title, artist: s.artist, year: s.year });
+    // Carry spotifyId across: without it, regenerating "All Songs" silently
+    // strips every baked track id and the theme stops working in DJ mode
+    // until the resolver is re-run over ~1,800 songs.
+    if (!seen.has(key)) {
+      const song = { title: s.title, artist: s.artist, year: s.year };
+      if (s.spotifyId) song.spotifyId = s.spotifyId;
+      seen.set(key, song);
+    } else if (s.spotifyId && !seen.get(key).spotifyId) {
+      seen.get(key).spotifyId = s.spotifyId; // first theme lacked one, a later one has it
+    }
   }
 }
 
