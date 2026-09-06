@@ -1,10 +1,14 @@
 {
   "//": "Hand-picked track ids that win over whatever the search picked. Values may be a Spotify track URL or a bare 22-char id; empty values are ignored, so an unfilled line is harmless. In Spotify: find the right version -> Share -> Copy Song Link -> paste below. Costs no API quota.",
 
-  "//needs-attention": "Flagged by --report as a different performance, and confirmed wrong on inspection:",
+  "//needs-attention": "Flagged by --report as a different performance, and confirmed wrong on inspection. The search matched a live take, a remix or a re-recording — title and artist are right, the performance isn't:",
   "Give Peace a Chance|Plastic Ono Band": "",
   "Judy in Disguise (With Glasses)|John Fred & His Playboy Band": "",
+  "Hurts So Good|John Cougar": "",
+  "Jack & Diane|John Cougar": "",
+  "Love Shine a Light|Katrina and the Waves": "",
   "Little Saint Nick|The Beach Boys": "",
+  "Merry Christmas Darling|Carpenters": "",
 
-  "//checked-and-fine": "Also flagged, but the match is right and needs no override: 'A Boy Named Sue' (the San Quentin live cut IS the hit), 'Cheerleader' (the Felix Jaehn remix IS the hit), 'Wedding Bell Blues' (the 5th Dimension's own recording, just labelled as a Laura Nyro cover), 'California Girls', 'Boten Anna', 'Levels', 'Ding Dong Song', \"Don't You Worry Child\" (radio edits are the single versions)."
+  "//checked-and-fine": "Also flagged, but the match is right and needs no override: 'A Boy Named Sue' (the San Quentin live cut IS the hit), 'Cheerleader' (the Felix Jaehn remix IS the hit), 'Wedding Bell Blues' (the 5th Dimension's own recording, labelled as a Laura Nyro cover), 'California Girls' (2001 remaster of the 1965 original)."
 }
