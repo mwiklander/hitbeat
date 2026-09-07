@@ -49,7 +49,8 @@ fi
 # Refuse to run on a dirty tree — this script commits, and it must never sweep
 # up someone's half-finished edit into an unattended commit.
 if [[ -n "$(git status --porcelain -- data scripts 2>/dev/null)" ]]; then
-  say "SKIP: working tree has uncommitted changes under data/ or scripts/"
+  say "SKIP: uncommitted changes — commit or discard these, then passes resume:"
+  git status --porcelain -- data scripts | sed 's/^/       /' >> "$LOG"
   exit 0
 fi
 
@@ -64,21 +65,29 @@ OUT=$(node scripts/resolve-daily-run.js "$BUDGET" 2>&1)
 say "$(echo "$OUT" | grep -E 'Lookups done|quota|matched|API calls' | tail -3 | tr '\n' ' ')"
 
 LEFT_AFTER=$(remaining)
-if [[ "$LEFT_AFTER" == "$LEFT_BEFORE" ]]; then
-  say "no progress (quota not yet reset) — $LEFT_AFTER still to go"
-  exit 0
-fi
+RESOLVED=$((LEFT_BEFORE - LEFT_AFTER))
+[[ "$RESOLVED" -le 0 ]] && say "no new lookups (quota not yet reset) — $LEFT_AFTER still to go"
 
+# Rebuild and commit on the basis of ACTUAL file changes, never on whether the
+# unresolved count dropped. The resolver's bake step also stamps already-cached
+# ids onto songs added since the last pass, which changes files while resolving
+# nothing new. Gating the commit on the count let that output sit uncommitted,
+# and the dirty-tree guard above then blocked every later pass — two runs were
+# lost that way on 2026-09-07 before this was fixed.
 node scripts/build-all-songs.js >> "$LOG" 2>&1
 
 if [[ -z "$(git status --porcelain -- data)" ]]; then
-  say "resolver made no file changes; nothing to commit"
+  say "no file changes; nothing to commit"
   exit 0
 fi
 
-RESOLVED=$((LEFT_BEFORE - LEFT_AFTER))
+if [[ "$RESOLVED" -gt 0 ]]; then
+  SUBJECT="Resolve $RESOLVED more track ids ($LEFT_AFTER still to go)"
+else
+  SUBJECT="Stamp cached track ids onto newly added songs"
+fi
 git add -- data
-git commit -q -m "Resolve $RESOLVED more track ids ($LEFT_AFTER still to go)
+git commit -q -m "$SUBJECT
 
 Automated pass by scripts/resolve-daily.sh, bounded by the Spotify
 Development Mode quota. Re-run resumes from data/track-ids.json." || { say "commit failed"; exit 1; }
